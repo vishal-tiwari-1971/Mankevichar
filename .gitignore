@@ -1,0 +1,33 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment Variables
+.env
+
+# Build output
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE/editor files
+.idea/
+.vscode/
+*.sublime-workspace
+*.swp
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+coverage/
+*.tgz
+*.zip

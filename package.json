@@ -1,0 +1,23 @@
+{
+  "name": "mankevichar",
+  "version": "1.0.0",
+  "description": "A dedicated project for diary writers ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": " nodemon index.js"
+  },
+  "author": "VISHAL TIWARI",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.7.1",
+    "nodemon": "^3.1.7"
+  }
+}
+ 
