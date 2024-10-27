@@ -8,7 +8,9 @@ const cookieParser=require('cookie-parser')
 // custom middleware
 const auth = require("./middleware/auth")
 const app = express()
+// to allow json format data 
 app.use(express.json())
+// to get data from forms
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
