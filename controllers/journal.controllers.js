@@ -16,7 +16,7 @@ exports.createEntry = async (req, res) => {
     try {
         const { title, content } = req.body;
 
-        if (!title || !content) {
+        if (!(title && content)) {
             return res.status(400).send("Title and content are required.");
         }
 

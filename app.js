@@ -1,6 +1,7 @@
 require("dotenv").config()
 require("./config/database").connect()
 const User=require('./model/user')
+const Journal=require('./model/journal')
 const express = require('express')
 const jwt=require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -16,7 +17,7 @@ app.use(cookieParser())
 
 
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome to VMark</h1> ")
+  res.send("<h1>Welcome to Man Ke Vichar</h1> ")
 })
 
 app.use("/users", require("./Routes/user.routes"))
