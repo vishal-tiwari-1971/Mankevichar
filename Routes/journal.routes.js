@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const journalController = require('../controllers/journalController');
+const journalController = require('../controllers/journal.controllers.js');
 const auth = require("../middleware/auth");
 const upload=require("../middleware/multer")
 
@@ -8,13 +8,20 @@ const upload=require("../middleware/multer")
 // Get all journal entries
 router.get('/entries', auth, journalController.getAllEntries);
 
-// Create a new journal entry (with image upload)
-router.post('/entries', auth, upload.single('image'), journalController.createEntry);
+// Create a new journal entry 
+router.post('/entries', auth, journalController.createEntry);
 
-// Update a journal entry (with image upload)
-router.put('/entries/:id', auth, upload.single('image'), journalController.updateEntry);
+// Define the upload endpoint
+router.post('/upload',upload.single('image'), journalController.uploadImage);
+
+
+// Update a journal entry
+router.put('/entries/:id', auth, journalController.updateEntry);
+
+
 
 // Delete a journal entry
 router.delete('/entries/:id', auth, journalController.deleteEntry);
 
-module.exports = router;
+module.exports = router;  
+
