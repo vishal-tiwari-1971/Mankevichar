@@ -5,9 +5,9 @@ const jwt = require('jsonwebtoken');
 // Signup logic
 exports.signup = async (req, res) => {
     try {
-        const { firstName, lastName, mobileNumber, email, password } = req.body;
+        const { firstName, lastName, email, password } = req.body;
 
-        if (!(firstName && lastName && mobileNumber && email && password)) {
+        if (!(firstName && lastName && email && password)) {
             return res.status(401).send("Please fill all the required fields");
         }
 
@@ -24,7 +24,6 @@ exports.signup = async (req, res) => {
         const user = await User.create({
             firstName,
             lastName,
-            mobileNumber,
             email,
             password: encryptPassword
         });
