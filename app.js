@@ -18,14 +18,15 @@ app.get("/", (req, res) => {
 })
 
 app.use("/users", require("./Routes/user.routes"))
+app.use("/journal",require("./Routes/journal.routes"))
 
 
 
+app.get("/profile", auth, (req, res) => {
+  // Access to req.user = { id, email }
+  // Query the database based on id and retrieve user info
+  // Send a JSON response with user data
+});
 
-app.get("/profile", (req,auth,res)=>{
-//   //  access to req.user=id,email
-//   // based on id , query to DB and get all info of user - findOne({id})
-//   // send a json response with all data
-})
 
   module.exports=app

@@ -1,5 +1,6 @@
-import {v2 as cloudinary} from "cloudinary"
-import  fs  from "fs"
+const cloudinary = require('cloudinary').v2; // Use v2 for Cloudinary
+const fs = require('fs');
+const path = require('path');
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -7,22 +8,39 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const uploadOnCloudinary=async(localFilePath)=>{
+const uploadOnCloudinary = async (localFilePath) => {
+    
     try {
-       if(!localFilePath) return null
-       // upload the file on cloudinary
-       const response=await cloudinary.uploader.upload(localFilePath,{
-        resource_type:"auto"
-       })
-       //file has been uploaded successfull
-       //console.log(`file is uploaded on cloudinary`,response.url);
-       fs.unlinkSync(localFilePath)
-       return response
+        if (!localFilePath) return null;
+
+        // Check if the file exists before attempting to upload
+        if (!fs.existsSync(localFilePath)) {
+            console.error(`File not found: ${localFilePath}`);
+            return null;
+        }
+
+        // Upload the file on Cloudinary
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: "auto"
+        });
+
+        // File has been uploaded successfully
+        console.log(`File is uploaded on Cloudinary: ${response.secure_url}`);
+        
+        // Remove the locally saved temporary file after upload
+        fs.unlinkSync(localFilePath);
+        
+        return response;
     } catch (error) {
-        fs.unlinkSync(localFilePath)//remove the locally saved temporary file as the upload operation got  faild
-        return null
+        console.error('Error uploading to Cloudinary:', error);
+        
+        // Ensure the file exists before trying to unlink
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath); // Remove the locally saved temporary file as the upload operation failed
+        }
+
+        return null;
     }
 }
 
-
-export {uploadOnCloudinary} 
+module.exports = uploadOnCloudinary;
