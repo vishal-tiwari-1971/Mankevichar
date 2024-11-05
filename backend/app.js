@@ -24,6 +24,4 @@ app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
 
 
-
-
   module.exports=app
