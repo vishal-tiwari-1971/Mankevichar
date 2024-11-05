@@ -1,4 +1,5 @@
 const Journal = require('../model/journal'); 
+const mongoose = require('mongoose');
 
 // Get all journal entries
 exports.getAllEntries = async (req, res) => {
@@ -20,11 +21,17 @@ exports.createEntry = async (req, res) => {
             return res.status(400).send("Title and content are required.");
         }
 
-        // Check if an image file was uploaded
-        let image = null;
-        if (req.file) {
-            image = req.file.filename; // Save the file name of the uploaded image
-        }
+    //    let image = null;
+       
+    //     if (req.file) {
+    //         // image = req.file.filename ;  Save the file name of the uploaded image
+    //          // The file is uploaded to Cloudinary automatically
+    // const image = req.file.path; // Get the URL of the uploaded file
+    // // res.json({ message: 'File uploaded successfully', url: imagePath});
+    //     }
+        
+    let image = req.file ? req.file.path : null;
+
 
         const journal = await Journal.create({
             title,
@@ -45,8 +52,13 @@ exports.updateEntry = async (req, res) => {
     try {
         const { title, content } = req.body;
         const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send('Invalid ID format');
+        }
+        
 
         const journal = await Journal.findById(id);
+        console.log('Received ID:', id);
 
         if (!journal) {
             return res.status(404).send("Journal entry not found.");
@@ -57,15 +69,22 @@ exports.updateEntry = async (req, res) => {
             return res.status(403).send("You are not authorized to update this entry.");
         }
 
+        // Update title and content if provided
         journal.title = title || journal.title;
         journal.content = content || journal.content;
 
         if (req.file) {
-            // Delete the old image if it exists
+            // Delete the old image if it exists (consider storing URLs rather than local paths)
             if (journal.image) {
-                fs.unlinkSync(path.join(__dirname, '../uploads/', journal.image));
+             
+                const publicId = path.basename(journal.image, path.extname(journal.image)); // Extract public ID from URL
+                await cloudinary.uploader.destroy(publicId); // Remove the old image from Cloudinary
             }
-            journal.image = req.file.filename;
+            // Upload new image to Cloudinary
+            const uploadResponse = await uploadOnCloudinary(req.file.path); 
+            if (uploadResponse) {
+                journal.image = uploadResponse.secure_url; // Set the new image URL
+            }
         }
 
         await journal.save();
@@ -91,6 +110,12 @@ exports.deleteEntry = async (req, res) => {
         // Check if the logged-in user owns the journal entry
         if (journal.userId.toString() !== req.user.id) {
             return res.status(403).send("You are not authorized to delete this entry.");
+        }
+
+        // Delete the image from Cloudinary if it exists
+        if (journal.image) {
+            const publicId = path.basename(journal.image, path.extname(journal.image)); // Extract public ID from URL
+            await cloudinary.uploader.destroy(publicId); // Remove the image from Cloudinary
         }
 
         await journal.remove();

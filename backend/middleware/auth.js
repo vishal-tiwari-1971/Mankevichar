@@ -6,8 +6,6 @@ const auth=(req,res,next)=>{
 const {token}=req.cookies
 // || req.header||req.body
 // or {token}=req.cookies  token=req.cookies.token
-// Authorization="Bearer longtokenvalue"
-// const token=req.header("Authorization").replace("Bearer ","")
 
 // if token is exist
 if(!(token)){

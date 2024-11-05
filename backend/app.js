@@ -20,15 +20,10 @@ app.get("/", (req, res) => {
   res.send("<h1>Welcome to Man Ke Vichar</h1> ")
 })
 
-app.use("/users", require("./Routes/user.routes"))
+app.use("/user", require("./Routes/user.routes"))
+app.use("/journal", require("./Routes/journal.routes"))
 
 
 
-
-app.get("/profile", (req,auth,res)=>{
-//   //  access to req.user=id,email
-//   // based on id , query to DB and get all info of user - findOne({id})
-//   // send a json response with all data
-})
 
   module.exports=app
