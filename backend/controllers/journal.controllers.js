@@ -1,5 +1,4 @@
 const Journal = require('../model/journal'); 
-const uploadOnCloudinary=require('../utils/cloudinary')
 const mongoose = require('mongoose');
 
 // Get all journal entries
@@ -30,7 +29,7 @@ exports.createEntry = async (req, res) => {
         const journal = await Journal.create({
             title,
             content,
-            //image,  // Save the image path to the journal entry
+            image,  // Save the image path to the journal entry
             userId: req.user.id
         });
 
@@ -41,27 +40,6 @@ exports.createEntry = async (req, res) => {
     }
 };
 
-exports.uploadImage = async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).send("No file uploaded.");
-      }
-      const localFilePath = req.file.path;
-      const result = await uploadOnCloudinary(localFilePath);
-      
-      if (result) {
-        return res.status(200).json({
-          message: 'Image uploaded successfully!',
-          url: result.secure_url // Send back the Cloudinary URL
-        });
-      } else {
-        return res.status(500).send("Error uploading to Cloudinary.");
-      }
-    } catch (error) {
-      console.error(error); // Log the error for debugging
-      return res.status(500).send("An error occurred during upload.");
-    }
-  };
 
 // Update a journal entry
 exports.updateEntry = async (req, res) => {
@@ -80,7 +58,10 @@ exports.updateEntry = async (req, res) => {
             return res.status(404).send("Journal entry not found.");
         }
 
-
+        // Check if the logged-in user owns the product entry
+        if (journal.userId.toString() !== req.user.id) {
+            return res.status(403).send("You are not authorized to update this entry.");
+        }
         // Update title and content if provided
         journal.title = title || journal.title;
         journal.content = content || journal.content;
@@ -120,6 +101,11 @@ exports.deleteEntry = async (req, res) => {
             return res.status(404).send("Journal entry not found");
         }
 
+          // Check if the logged-in user owns the product entry
+          if (journal.userId.toString() !== req.user.id) {
+            return res.status(403).send("You are not authorized to delete this entry.");
+        }
+
         // Delete the image from Cloudinary if it exists
         if (journal.image) {
             const publicId = path.basename(journal.image, path.extname(journal.image)); // Extract public ID from URL
@@ -130,7 +116,7 @@ exports.deleteEntry = async (req, res) => {
 
         return res.status(200).send("Journal entry deleted successfully");
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return res.status(500).send("There was an error deleting the journal entry.");
     }
 };
