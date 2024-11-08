@@ -4,8 +4,8 @@ const Card=()=> {
     <div className="card bg-base-100 w-96 shadow-xl">
   <figure>
     <img
-      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-      alt="Shoes" />
+      src="https://cdn.pixabay.com/photo/2018/06/17/17/48/pen-3481061_640.jpg"
+      alt="diary" />
   </figure>
   <div className="card-body">
     <h2 className="card-title">
