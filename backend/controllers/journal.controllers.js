@@ -1,5 +1,10 @@
 const Journal = require('../model/journal'); 
 const mongoose = require('mongoose');
+const cloudinary = require('cloudinary').v2; 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // or other configuration
+const path = require('path');  
+
 
 // Get all journal entries
 exports.getAllEntries = async (req, res) => {
@@ -46,6 +51,8 @@ exports.updateEntry = async (req, res) => {
     try {
         const { title, content } = req.body;
         const { id } = req.params;
+        console.log('Received ID:', id);
+
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).send('Invalid ID format');
         }
@@ -65,9 +72,10 @@ exports.updateEntry = async (req, res) => {
         // Update title and content if provided
         journal.title = title || journal.title;
         journal.content = content || journal.content;
-
+        // journal.image = image || journal.image;
        
         if (req.file) {
+            console.log('File received:', req.file);
             // Delete the old image if it exists (consider storing URLs rather than local paths)
             if (journal.image) {
              
@@ -75,7 +83,13 @@ exports.updateEntry = async (req, res) => {
                 await cloudinary.uploader.destroy(publicId); // Remove the old image from Cloudinary
             }
             // Upload new image to Cloudinary
-            const uploadResponse = await uploadOnCloudinary(req.file.path); 
+            const uploadResponse = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'uploads', // Specify the folder in Cloudinary
+        allowed_formats: ['jpg', 'png', 'jpeg'], // Specify allowed formats
+        filename: (req, file) => {
+            return Date.now() + '-' + file.originalname; // Unique filename
+        }
+            }); 
             if (uploadResponse) {
                 journal.image = uploadResponse.secure_url; // Set the new image URL
             }
@@ -94,25 +108,46 @@ exports.updateEntry = async (req, res) => {
 exports.deleteEntry = async (req, res) => {
     try {
         const { id } = req.params; 
+        console.log('Received ID:', id);
+         // Check if the provided ID is a valid ObjectId
+         if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send('Invalid ID format');
+        }
         // Use findByIdAndDelete to remove the journal entry
-        const result = await Journal.findByIdAndDelete(id);
+        const journal = await Journal.findById(id);
 
-        if (!result) {
+        // image URL to debug
+        console.log('Image URL:', journal.image);
+
+        if (!journal) {
             return res.status(404).send("Journal entry not found");
         }
 
-          // Check if the logged-in user owns the product entry
-          if (journal.userId.toString() !== req.user.id) {
+         // Check if the logged-in user owns the product entry
+         if (journal.userId.toString() !== req.user.id) {
             return res.status(403).send("You are not authorized to delete this entry.");
         }
 
-        // Delete the image from Cloudinary if it exists
-        if (journal.image) {
-            const publicId = path.basename(journal.image, path.extname(journal.image)); // Extract public ID from URL
-            await cloudinary.uploader.destroy(publicId); // Remove the image from Cloudinary
+          // If there is an associated image, delete it from Cloudinary
+         if (journal.image) {
+            const publicId = path.basename(journal.image, path.extname(journal.image));  // Extract the public ID from the URL
+
+            console.log('Extracted Public ID:', publicId);  // Log the extracted public ID for debugging
+
+            // Delete the image from Cloudinary using the public ID
+            const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
+
+            console.log('Cloudinary Response:', cloudinaryResponse);  // Log the Cloudinary response for debugging
+
+            // Check if Cloudinary responded with a valid result
+            if (cloudinaryResponse.result !== 'ok') {
+                console.log('Failed to delete image from Cloudinary');
+                return res.status(500).send('Error deleting image from Cloudinary');
+            }
         }
 
-        await journal.remove();
+         // Delete the journal entry from the database
+         await Journal.findByIdAndDelete(id);
 
         return res.status(200).send("Journal entry deleted successfully");
     } catch (error) {
