@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Navbar from './Components/Navbar';
+import Navbar from './Navbar';
 
 const Support = () => {
   const [message, setMessage] = useState('');

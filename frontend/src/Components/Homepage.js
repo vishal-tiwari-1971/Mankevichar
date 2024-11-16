@@ -12,7 +12,7 @@ const HomePage = () => {
     useEffect(() => {
         const getJournals = async () => {
           try {
-            const response = await axios.get('journal/entries'); 
+            const response = await axios.get('/journal/entries'); 
             setJournals(response.data); 
           } catch (error) {
             setError(error.message);
