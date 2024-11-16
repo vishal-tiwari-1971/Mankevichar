@@ -15,8 +15,18 @@ exports.getAllEntries = async (req, res) => {
         console.log(error);
         return res.status(500).send("Error retrieving journal entries.");
     }
-};
+}; 
 
+// Get journal entries by Id
+exports.getEntriesById = async (req, res) => {
+    try {
+        const journal = await Journal.findById(req.params.id); 
+        return res.status(200).json(journal);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Error retrieving journal entries.");
+    }
+};
 // Create a new journal entry with an image upload
 exports.createEntry = async (req, res) => {
     try {
