@@ -1,26 +1,29 @@
-import Navbar from './Components/Navbar'
-import Card from './Components/Card'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './Components/Homepage'; // Import your HomePage
+import CreateDiaryPage from './Components/Create'
+// import Navbar from './Components/Navbar'
+// import Card from './Components/Card'
 import Signup from './Components/Signup'
 import Login from './Components/Login'
 import './index.css'
+import './App.css'
+import Profile from './Components/Profile';
+import Dashboard from './Components/Dashboard';
+import Support from './Support';
 
 function App() {
-  return (<>
-    <Navbar/>
-    <div class="mt-6 grid grid-cols-3 gap-4 ">
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
-    <Card/>
-    </div>
-    <Signup/>
-    <Login/>
-    </>
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/create" element={<CreateDiaryPage />} />
+        <Route path="/signup" element={<Signup/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/support" element={<Support/>}/>
+      </Routes>
+    </Router>
     );
 }
 

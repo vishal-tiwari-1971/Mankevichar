@@ -8,7 +8,7 @@ const upload = require('../middleware/multer'); // Adjust the path as needed
 
 
 // Get all journal entries
-router.get('/entries', auth, journalController.getAllEntries);
+router.get('/entries',  journalController.getAllEntries);
 
 // Create a new journal entry (with image upload) initially entries
 router.post('/entries', auth, upload.single('image'), journalController.createEntry);
