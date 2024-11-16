@@ -13,6 +13,8 @@ router.get('/entries',  journalController.getAllEntries);
 // Create a new journal entry (with image upload) initially entries
 router.post('/entries', auth, upload.single('image'), journalController.createEntry);
 
+// Get journal by Id 
+router.get('/entry/:id', journalController.getEntriesById)
 // Update a journal entry
 router.put('/entries/:id', auth, upload.single('image'), journalController.updateEntry);
 
