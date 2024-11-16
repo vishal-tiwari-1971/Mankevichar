@@ -10,6 +10,7 @@ import './App.css'
 import Profile from './Components/Profile';
 import Dashboard from './Components/Dashboard';
 import Support from './Components/Support';
+import Journal from './Components/Journal';
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/support" element={<Support/>}/>
-      </Routes>
+        <Route path="/journal/entry/:id" element={<Journal/>}/>
+       </Routes>       
     </Router>
     );
 }
