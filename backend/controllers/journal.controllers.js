@@ -40,9 +40,9 @@ exports.getUSerJournal =[ auth , async (req, res) => {
     try {  const userId= req.user.id
         console.log("Received userId:", userId);
 
-        // if (!( mongoose.Types.ObjectId.isValid(userId))) {
-        //     return res.status(400).json({ error: 'Invalid userId format' });
-        // }
+        if (!( mongoose.Types.ObjectId.isValid(userId))) {
+            return res.status(400).json({ error: 'Invalid userId format' });
+        }
 
         // Query the database for journals
         const journals = await Journal.find({ userId });
