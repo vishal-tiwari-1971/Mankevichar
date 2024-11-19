@@ -15,6 +15,9 @@ router.post('/entries', auth, upload.single('image'), journalController.createEn
 
 // Get journal by Id 
 router.get('/entry/:id', journalController.getEntriesById)
+
+// Get Journal by User Id
+router.get('/dashboard',auth ,journalController.getUSerJournal)
 // Update a journal entry
 router.put('/entries/:id', auth, upload.single('image'), journalController.updateEntry);
 

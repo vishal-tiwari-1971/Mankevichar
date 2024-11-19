@@ -1,6 +1,8 @@
 const Journal = require('../model/journal'); 
+const User = require('../model/user')
 const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2; 
+const auth= require('../middleware/auth')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // or other configuration
 const path = require('path');  
@@ -20,13 +22,38 @@ exports.getAllEntries = async (req, res) => {
 // Get journal entries by Id
 exports.getEntriesById = async (req, res) => {
     try {
-        const journal = await Journal.findById(req.params.id); 
-        return res.status(200).json(journal);
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(400).json({ error: 'User not found in token' });
+          }
+            // Fetch the journals related to the userId
+    const journals = await Journal.find({ userId });
+       return res.status(200).json(journals);
     } catch (error) {
         console.log(error);
         return res.status(500).send("Error retrieving journal entries.");
     }
 };
+
+// Get journal by User Id
+exports.getUSerJournal =[ auth , async (req, res) => {
+    try {  const userId= req.user.id
+        console.log("Received userId:", userId);
+
+        // if (!( mongoose.Types.ObjectId.isValid(userId))) {
+        //     return res.status(400).json({ error: 'Invalid userId format' });
+        // }
+
+        // Query the database for journals
+        const journals = await Journal.find({ userId });
+        // console.log("Found journals:", journals);  // Log the found journals
+        return res.status(200).json(journals);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Error retrieving journal entries.");
+    }
+} ];
+
 // Create a new journal entry with an image upload
 exports.createEntry = async (req, res) => {
     try {

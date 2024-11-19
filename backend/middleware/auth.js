@@ -15,6 +15,7 @@ if(!(token)){
 try { const decode=jwt.verify(token,process.env.SECRET)
 console.log(decode);
 req.user=decode 
+
 return next()
 // extract id from token and query to database
 } catch(error){
