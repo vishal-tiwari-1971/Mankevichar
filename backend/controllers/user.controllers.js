@@ -32,7 +32,6 @@ exports.signup = async (req, res) => {
         const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
         user.token = token;
         user.password = undefined;
-
         return res.status(201).json({ message: "Registered successfully", user });
     } catch (error) {
         console.log(error);
@@ -79,7 +78,3 @@ exports.login = async (req, res) => {
     }
 };
 
-// Dashboard logic (protected route)
-exports.dashboard = (req, res) => {
-    res.send("Welcome to the dashboard!");
-};

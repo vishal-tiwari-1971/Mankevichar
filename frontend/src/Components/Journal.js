@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 
 
 
-function Journal() {
+const Journal=()=> {
   const { id } = useParams();
   console.log("Journal ID:", id);
   const [journal, setJournal] = useState(null);
