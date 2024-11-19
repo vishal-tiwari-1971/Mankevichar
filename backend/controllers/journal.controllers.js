@@ -22,12 +22,8 @@ exports.getAllEntries = async (req, res) => {
 // Get journal entries by Id
 exports.getEntriesById = async (req, res) => {
     try {
-        const userId = req.userId;
-        if (!userId) {
-            return res.status(400).json({ error: 'User not found in token' });
-          }
-            // Fetch the journals related to the userId
-    const journals = await Journal.find({ userId });
+         // Fetch the journals related to the journal id 
+       const journals = await Journal.findById(req.params.id);
        return res.status(200).json(journals);
     } catch (error) {
         console.log(error);
