@@ -30,7 +30,7 @@ const Journal=()=> {
   }, [id]);
 
   if (loading) return <div>Loading...</div>;
-  if (!journal) return <div>Journal not found</div>;
+  // if (!journal) return <div>Journal not found</div>;
 
   return (
    
