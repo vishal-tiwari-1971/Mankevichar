@@ -1,17 +1,11 @@
 import axios from "axios";
 import { useEffect, useState,  } from "react";
-import { useParams , useNavigate } from 'react-router-dom';
-
-
-
 const UserJournal= () =>{
     const [userJournal, setUserJournal]=useState([]);
     const [isLoading , setIsLoading]=useState(true);
     const [error, setError] = useState(null);
     
-
-    
-    useEffect(()=>{
+useEffect(()=>{
         const journals = async ()=>{ 
             try { const response = await axios.get(`/journal/dashboard`)
             console.log(response.data);
@@ -26,12 +20,12 @@ const UserJournal= () =>{
           }; journals(); }  ,[]
           )
    
-        //   if(isLoading)
-        //     return <h1>Loading....</h1>
-        // if(error)
-        //     return <h2>Error occured</h2>
-        // if(!userJournal)
-        //     return <h2>You haven't created journal with now</h2>
+          if(isLoading)
+            return <h1>Loading....</h1>
+        if(error)
+            return <h2>Error occured</h2>
+        if(!userJournal)
+            return <h2>You haven't created journal with now</h2>
     return(
         
         //   {/* Uploaded Journals Section */}
@@ -53,5 +47,4 @@ const UserJournal= () =>{
         
     )
 }
-
 export default UserJournal;

@@ -29,7 +29,7 @@ const TrendingJournal=({journals = []})=>{
 <div class="container mx-auto ">
            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 dark:bg-gray-900">
             {journalList.map((journal) => (
-                <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col" key={journal.id}> 
+                <div class="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col" key={journal.id}> 
                 <div class="w-full h-48 mb-2 overflow-hidden"> 
                   {journal.image ? <img class="w-full h-full object-contain object-center" src={journal.image} alt={journal.title} loading="lazy"/> : <img src={`https://placehold.co/800?text=${journal.title}&font=roboto`}class='w-full h-full object-contain object-center' alt={journal.title}/>
    }   </div> 

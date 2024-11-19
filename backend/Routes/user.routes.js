@@ -9,7 +9,4 @@ router.post("/signup", userController.signup);
 // Route for login
 router.post("/login", userController.login);
 
-// Route for dashboard (protected route)
-router.get("/dashboard", auth, userController.dashboard);
-
 module.exports = router;
