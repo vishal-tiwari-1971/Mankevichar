@@ -1,6 +1,7 @@
 const User = require('../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const sendMail = require('../utils/mailer.js');
 
 // Signup logic
 exports.signup = async (req, res) => {
@@ -10,7 +11,7 @@ exports.signup = async (req, res) => {
         if (!(firstName && lastName && email && password)) {
             return res.status(401).send("Please fill all the required fields");
         }
-
+ 
         // Checking if the email is unique
         const existUser = await User.findOne({ email });
         if (existUser) {
@@ -32,6 +33,16 @@ exports.signup = async (req, res) => {
         const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
         user.token = token;
         user.password = undefined;
+
+        //Send confirmation email after successful signup
+
+        const subject = 'Welcome to Our Journal';
+        const text = `Hello ${firstName},\n\nWelcome to our journal website! We're excited to have you.`;
+        const html = `<h1>Welcome to Our Journal</h1><p>Hello ${firstName},</p><p>Welcome to our journal website! We're excited to have you.</p>`;
+
+        await sendMail(email, subject, text, html);
+
+
         return res.status(201).json({ message: "Registered successfully", user });
     } catch (error) {
         console.log(error);
@@ -78,3 +89,7 @@ exports.login = async (req, res) => {
     }
 };
 
+// Dashboard logic (protected route)
+exports.dashboard = (req, res) => {
+    res.send("Welcome to the dashboard!");
+};

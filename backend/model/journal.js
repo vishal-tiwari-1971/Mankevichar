@@ -6,7 +6,7 @@ const journalSchema = new mongoose.Schema({
   image: {type: String, required: false},
   userId: { type: mongoose.Schema.Types.ObjectId, ref:'User' },
   createdAt: { type: Date, default: Date.now },
-  isPrivate: { type: Boolean, default: false },
+  visibility: { type: String, enum: ['private', 'public'], default: 'private' },
 });
 
 const Journal = mongoose.model('Journal', journalSchema);

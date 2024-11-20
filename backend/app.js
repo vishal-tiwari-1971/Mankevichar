@@ -14,6 +14,7 @@ const cors=require('cors')
 app.use(express.json())
 // to get data from forms
 app.use(express.urlencoded({ extended: true }))
+
 app.use(cookieParser())
 
 
@@ -25,4 +26,4 @@ app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
 
 
-  module.exports=app
+module.exports=app

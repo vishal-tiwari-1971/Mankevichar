@@ -2,12 +2,11 @@ const Journal = require('../model/journal');
 const User = require('../model/user')
 const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2; 
-const auth= require('../middleware/auth')
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // or other configuration
 const path = require('path');  
-
-
+const auth= require('../middleware/auth')
+ 
 // Get all journal entries
 exports.getAllEntries = async (req, res) => {
     try {
@@ -18,18 +17,7 @@ exports.getAllEntries = async (req, res) => {
         return res.status(500).send("Error retrieving journal entries.");
     }
 }; 
-
-// Get journal entries by Id
-exports.getEntriesById = async (req, res) => {
-    try {
-         // Fetch the journals related to the journal id 
-       const journals = await Journal.findById(req.params.id);
-       return res.status(200).json(journals);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send("Error retrieving journal entries.");
-    }
-};
+ 
 
 // Get journal by User Id
 exports.getUSerJournal =[ auth , async (req, res) => {
@@ -49,17 +37,14 @@ exports.getUSerJournal =[ auth , async (req, res) => {
         return res.status(500).send("Error retrieving journal entries.");
     }
 } ];
-
 // Create a new journal entry with an image upload
 exports.createEntry = async (req, res) => {
     try {
-        const { title, content } = req.body;
+        const { title, content,visibility } = req.body;
 
         if (!(title && content)) {
             return res.status(400).send("Title and content are required.");
         }
-
-
         
     let image = req.file ? req.file.path : null;
 
@@ -67,7 +52,8 @@ exports.createEntry = async (req, res) => {
         const journal = await Journal.create({
             title,
             content,
-            image,  // Save the image path to the journal entry
+            image,
+            visibility,  // Save the image path to the journal entry
             userId: req.user.id
         });
 
@@ -84,6 +70,7 @@ exports.updateEntry = async (req, res) => {
     try {
         const { title, content } = req.body;
         const { id } = req.params;
+        const {visibility } = req.body;
         console.log('Received ID:', id);
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -105,6 +92,7 @@ exports.updateEntry = async (req, res) => {
         // Update title and content if provided
         journal.title = title || journal.title;
         journal.content = content || journal.content;
+        journal.visibility = visibility || journal.visibility;  // Save the visibility to the journal entry
         // journal.image = image || journal.image;
        
         if (req.file) {
