@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import React , { useState } from "react";
 import axios from 'axios'
 import Navbar from "./Navbar";
@@ -11,17 +11,41 @@ const Signup=()=>{
   
    console.log(userEmail,userPassword);
    
-   // to send data 
-   const submitData= async ()=>{
-     const data={ 
-      firstName:userFirstName,
-      lastName:userLastName,
-      email:userEmail,
-       password:userPassword,}
-       const response= await axios.post("/user/signup",data)
-       console.log(response);
-       
-   }
+   const navigate= useNavigate()
+   const submitData = async () => {
+    const data = {
+        firstName: userFirstName,
+        lastName: userLastName,
+        email: userEmail,
+        password: userPassword,
+    };
+
+    try {
+        // Send data to the backend for signup
+        const signupResponse = await axios.post("/user/signup", data);
+
+        // Now, log the user in immediately
+        const loginData = {
+            email: userEmail,
+            password: userPassword,
+        };
+        const loginResponse = await axios.post("/user/login", loginData);
+
+        // Store the token from the login response
+        localStorage.setItem('authToken', loginResponse.data.token);
+
+        // Log the login response for debugging
+        console.log(loginResponse);
+
+        // Redirect user to the profile or dashboard page
+        navigate('/profile'); // Or wherever you want the user to go after login
+
+    } catch (error) {
+        console.error("Signup/Login error:", error.response ? error.response.data : error.message);
+        // Optionally, show a user-friendly error message or handle it gracefully
+    }
+};
+
    
    const handleSubmit= async (event)=>{
      event.preventDefault()
