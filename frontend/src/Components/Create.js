@@ -51,6 +51,8 @@ const CreateDiaryPage = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    navigate('/')
+
   }
 
   return (<body class="bg-white dark:bg-gray-900">

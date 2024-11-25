@@ -7,7 +7,6 @@ import ProfilePicture from './ProfilePicture';
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
- 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,8 +15,7 @@ const Profile = () => {
         const token = localStorage.getItem('authToken');
 
         if (!token) {
-        
-          navigate('/login');  // Redirect to login if not authenticated
+          navigate('/login'); // Redirect to login if not authenticated
           return;
         }
 
@@ -26,57 +24,58 @@ const Profile = () => {
             Authorization: `Bearer ${token}`, // Pass token for authentication
           },
         };
+
         const { data } = await axios.get('/user/profile', config);
         setProfile(data);
+        console.log('Profile Data:', data);
+
       } catch (error) {
-        console.error('Error fetching profile:', error);
-        setProfile(null);
+        return (
+          <div>Error: Unable to load profile. Please check your internet connection or try logging in again.</div>
+        );
+        
+        // console.error('Error fetching profile:', error);
+        // setProfile(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
-  
   const handleLogout = async () => {
-      try {
-          // Send a request to the backend to logout (clear token in cookies or session)
-          await axios.post('/user/logout'); // Or use POST if you prefer
-  
-          // Clear the token from localStorage
-          localStorage.removeItem('authToken');
-  
-          // Redirect user to the home or login page
-          navigate('/'); // Or '/login' depending on where you want to redirect after logout
-  
-          // Optionally, display a success message or update UI (e.g., showing "Logged out")
-      } catch (error) {
-          console.error("Error during logout:", error);
-          // Optionally handle errors gracefully, like showing an error message to the user
-      }
+    try {
+      await axios.post('/user/logout'); // Logout request
+      localStorage.removeItem('authToken'); // Clear token
+      navigate('/'); // Redirect to home or login
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  if (!profile) {
+    return <div>Error: Unable to load profile. Please try again later.</div>;
+  }
 
-  const formattedJoinDate = new Date(profile.joinDate).toLocaleDateString();
+  const formattedJoinDate = profile?.joinDate
+    ? new Date(profile.joinDate).toLocaleDateString()
+    : 'Not Available';
 
   return (
     <div className="dark:bg-gray-900">
       <Navbar />
-      
-      
       <div className="profile-container p-5 flex justify-center items-center">
         <div className="bg-white bg-opacity-80 shadow-lg rounded-lg p-10 text-center w-80">
           <h2 className="text-2xl font-semibold text-black">Your Profile</h2>
           <div className="flex justify-center">
             {profile.profilePicture ? (
               <img
-                src={profile.profilePicture} // Show uploaded profile picture if available
+                src={profile.profilePicture}
                 alt="Profile"
                 className="rounded-full w-24 h-24 object-cover mb-4"
               />
@@ -116,7 +115,6 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

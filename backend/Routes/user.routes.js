@@ -3,9 +3,14 @@ const router = express.Router();
 const userController = require('../controllers/user.controllers');
 const auth = require('../middleware/auth');
 const User = require('../model/user');
+const Journal = require('../model/journal');
+
 
 // Route for signup
 router.post('/signup', userController.signup);
+
+// Route for verifying email
+//router.get('/verify-email', userController.verifyEmail);
 
 // Route for login
 router.post('/login', userController.login);
@@ -18,12 +23,16 @@ router.get('/profile', auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    
+    const journalsCount = await Journal.countDocuments({ userId: userId });
+   
+
     res.json({
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       joinDate: user.joinDate,
-      journals: user.journalsCount,
+      journals: journalsCount,
       likes: user.likesCount,
       profilePicture: user.profilePicture, // Updated to match schema field
     });

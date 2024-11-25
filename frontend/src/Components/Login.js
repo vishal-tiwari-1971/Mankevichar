@@ -12,15 +12,28 @@ console.log(userEmail,userPassword);
 const navigate= useNavigate()
 // to send data 
 const submitData= async ()=>{
-  const data={ email:userEmail,
-    password:userPassword,}
-    const response= await axios.post("/user/login",data)
-    console.log(response);
-    
-    if(response.data.success){
-      navigate('/')
+  try{
+
+    const data={ email:userEmail,
+      password:userPassword,}
+      const response= await axios.post("/user/login",data)
+      console.log(response);
       
+      if(response.data.success){
+        localStorage.setItem("authToken", response.data.token);
+        navigate('/')
+        
+      }
+  }
+  catch (error) {
+    if (error.response.status === 404) {
+      alert("User not found. Please sign up first.");
+    } else if (error.response.status === 401) {
+      alert("Invalid password. Please try again.");
+    } else {
+      alert("An error occurred. Please try again later.");
     }
+  }
     
 }
 
