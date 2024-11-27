@@ -5,7 +5,6 @@ import axios from 'axios';
 import Navbar from './Navbar';
 
 
-
 const Journal=()=> {
   const { id } = useParams();
   console.log("Journal ID:", id);

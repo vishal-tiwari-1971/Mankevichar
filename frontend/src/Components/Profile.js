@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture';
+import Spinner from './Spinner';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -55,7 +56,7 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (!profile) {

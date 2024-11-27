@@ -15,6 +15,7 @@ router.post('/entries', auth, upload.single('image'), journalController.createEn
 // Get Journal by User Id
 router.get('/dashboard',auth ,journalController.getUSerJournal)
 
+// Get a specific journal entry
 router.get('/entry/:id', async (req, res) => {
     try {
       const { id } = req.params;
@@ -29,6 +30,21 @@ router.get('/entry/:id', async (req, res) => {
     }
   });
   
+  // Toggle like and update count
+router.put('/like/:id', async (req, res) => {
+  try {
+    const journal = await Journal.findById(req.params.id);
+    if (!journal) return res.status(404).send('Journal not found');
+
+    const { liked } = req.body;
+    journal.likes = liked ? journal.likes + 1 : Math.max(journal.likes - 1, 0);
+    await journal.save();
+
+    res.status(200).json({ likes: journal.likes });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating likes', error: err.message });
+  }
+});
 
 // Update a journal entry
 router.put('/entries/:id', auth, upload.single('image'), journalController.updateEntry);
