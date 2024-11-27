@@ -1,9 +1,11 @@
 import axios from "axios";
-import { useEffect, useState,  } from "react";
+import { useEffect, useState  } from "react";
+import { Navigate, Link } from "react-router-dom"; 
 const UserJournal= () =>{
     const [userJournal, setUserJournal]=useState([]);
     const [isLoading , setIsLoading]=useState(true);
     const [error, setError] = useState(null);
+    
     
 useEffect(()=>{
         const journals = async ()=>{ 
@@ -19,7 +21,28 @@ useEffect(()=>{
           } 
           }; journals(); }  ,[]
           )
-   
+    
+          
+        //   const handleDelete = async () => {
+        //     try {
+        //       const response = await axios(`/journal/entries/${id}`);
+        
+        //       if (response.ok) {
+        //         // Remove the deleted product from the state
+        //         setUserJournal(userJournal.filter(journal => journal._id !== id));
+        //         alert("Journal deleted successfully");
+        //       } else {
+        //         const errorText = await response.text();
+        //         console.error('Error deleting journal:', errorText);
+        //         setError('Failed to delete journal. Please try again.');
+        //       }
+        //     } catch (error) {
+        //       console.error('Error during delete:', error);
+        //       setError('An error occurred while deleting the journal.');
+        //     }
+        //   };
+        
+        
           if(isLoading)
             return <h1>Loading....</h1>
         if(error)
@@ -40,8 +63,13 @@ useEffect(()=>{
       </div> 
                 <h3 class="text-lg font-semibold mb-2 text-center dark:text-white text-gray-700">{journal.title}</h3> 
                 <p class="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">{journal.content}</p> 
-      </div> ))}  </div> </div>
-          
+        
+      <div class="flex space-x-2 mt-4">
+    <Link to={`/update/${journal._id}`}><button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800" >Update</button></Link>
+    <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+    </div>   
+    </div>))}
+     </div></div>
       
       </section>
         
