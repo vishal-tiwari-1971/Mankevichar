@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Navigate,Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import Spinner from "./Spinner";
 
 const UserJournal = () => {
@@ -82,11 +82,11 @@ const UserJournal = () => {
                                 {journal.content}
                             </p>
                             <div class="flex space-x-2 mt-4">
-    <Link to={`/update/${journal._id}`}><button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800" >Update</button></Link>
-    <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
-    </div>   
-    </div>))}
-     </div></div>
+                                <Link to={`/update/${journal._id}`}><button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800" >Update</button></Link>
+                                <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                            </div>
+                        </div>))}
+                </div></div>
         </section>
     );
 };
