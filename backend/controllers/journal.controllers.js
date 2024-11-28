@@ -23,7 +23,7 @@ exports.getAllEntries = async (req, res) => {
 exports.getEntryById = async (req, res) => {
     try {
         const journals = await Journal.findById(req.params.id); 
->>>>>>> main
+
         return res.status(200).json(journals);
     } catch (error) {
         console.log(error);
