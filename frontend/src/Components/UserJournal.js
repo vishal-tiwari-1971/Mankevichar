@@ -82,11 +82,20 @@ const UserJournal = () => {
                                 {journal.content}
                             </p>
                             <div class="flex space-x-2 mt-4">
+<<<<<<< HEAD
                                 <Link to={`/update/${journal._id}`}><button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800" >Update</button></Link>
                                 <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
                             </div>
                         </div>))}
                 </div></div>
+=======
+    <Link to={`/update/${journal._id}`}>
+    <button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800" >Update</button></Link>
+    <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+    </div>   
+    </div>))}
+     </div></div>
+>>>>>>> da04b6c268a0408aef4a4054ac8d2540547e46e1
         </section>
     );
 };
