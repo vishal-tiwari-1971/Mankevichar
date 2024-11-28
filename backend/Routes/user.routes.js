@@ -5,7 +5,6 @@ const auth = require('../middleware/auth');
 const User = require('../model/user');
 const Journal = require('../model/journal');
 
-
 // Route for signup
 router.post('/signup', userController.signup);
 
@@ -23,15 +22,13 @@ router.get('/profile', auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    
 
     // Count the number of journals created by the user
     const journalsCount = await Journal.countDocuments({ userId });
 
-    // Aggregate total likes for the user's journals
-    const totalLikes = await Journal.aggregate([
-      { $match: { userId: userId } }, // Filter by user ID
-      { $group: { _id: null, totalLikes: { $sum: '$likes' } } },
-    ]);
+     // Count the number of journals liked by the user
+     const likedJournalsCount = await Journal.countDocuments({ likes: userId });
 
     // Return the user's profile data
     res.json({
@@ -40,7 +37,7 @@ router.get('/profile', auth, async (req, res) => {
       email: user.email,
       joinDate: user.joinDate,
       journals: journalsCount,
-      likes: totalLikes[0]?.totalLikes || 0,
+      likedJournals: likedJournalsCount,
       profilePicture: user.profilePicture  // Provide a default picture if none exists
     });
   } catch (err) {
@@ -48,6 +45,24 @@ router.get('/profile', auth, async (req, res) => {
     res.status(500).json({ message: 'Error fetching profile', error: err.message });
   }
 });
+
+//user liked journals
+router.get('/liked-journals', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).populate('likedJournals');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user.likedJournals);
+  } catch (error) {
+    console.error('Error fetching liked journals:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 // Logout route
 router.post('/logout', userController.logout);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Navigate,Link } from "react-router-dom";
 import Spinner from "./Spinner";
 
 const UserJournal = () => {
@@ -80,10 +81,12 @@ const UserJournal = () => {
                             <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">
                                 {journal.content}
                             </p>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                            <div class="flex space-x-2 mt-4">
+    <Link to={`/update/${journal._id}`}><button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800" >Update</button></Link>
+    <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+    </div>   
+    </div>))}
+     </div></div>
         </section>
     );
 };

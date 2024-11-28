@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
-
+import Spinner from './Spinner';
 
 const Journal=()=> {
   const { id } = useParams();
@@ -28,7 +28,7 @@ const Journal=()=> {
     getJournal();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner />;
   if (!journal) return <div>Journal not found</div>;
 
   return (

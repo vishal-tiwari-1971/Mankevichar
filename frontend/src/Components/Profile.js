@@ -29,16 +29,11 @@ const Profile = () => {
         const { data } = await axios.get('/user/profile', config);
         setProfile(data);
         console.log('Profile Data:', data);
-
       } catch (error) {
-        return (
-          <div>Error: Unable to load profile. Please check your internet connection or try logging in again.</div>
-        );
-        
-        // console.error('Error fetching profile:', error);
-        // setProfile(null);
+        console.error('Error fetching profile:', error);
+        setProfile(null); // Set profile to null in case of error
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop the spinner
       }
     };
 
@@ -60,11 +55,15 @@ const Profile = () => {
   }
 
   if (!profile) {
-    return <div>Error: Unable to load profile. Please try again later.</div>;
+    return navigate('/login');;
   }
 
   const formattedJoinDate = profile?.joinDate
-    ? new Date(profile.joinDate).toLocaleDateString()
+    ? new Date(profile.joinDate).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
     : 'Not Available';
 
   return (
@@ -81,25 +80,25 @@ const Profile = () => {
                 className="rounded-full w-24 h-24 object-cover mb-4"
               />
             ) : (
-              <ProfilePicture name={profile.firstName || 'User'} />
+              <ProfilePicture name={profile?.firstName || 'User'} />
             )}
           </div>
 
           <h2 className="text-xl font-bold text-gray-800">
-            {profile.firstName} {profile.lastName}
+            {profile?.firstName || 'Guest'} {profile?.lastName || ''}
           </h2>
-          <p className="text-sm text-gray-600">{profile.email}</p>
+          <p className="text-sm text-gray-600">{profile?.email || 'Not Available'}</p>
           <div className="flex justify-around mt-4 text-gray-800">
             <div>
               <h3 className="text-lg font-bold">{formattedJoinDate}</h3>
               <p className="text-xs">Joining Date</p>
             </div>
             <div>
-              <h3 className="text-lg font-bold">{profile.journals}</h3>
+              <h3 className="text-lg font-bold">{profile?.journals || 0}</h3>
               <p className="text-xs">Journals</p>
             </div>
             <div>
-              <h3 className="text-lg font-bold">{profile.likes}</h3>
+              <h3 className="text-lg font-bold">{profile?.likedJournals || 0}</h3>
               <p className="text-xs">Likes</p>
             </div>
           </div>

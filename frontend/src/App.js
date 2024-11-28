@@ -11,6 +11,7 @@ import Profile from './Components/Profile';
 import Dashboard from './Components/Dashboard';
 import Support from './Components/Support';
 import Journal from './Components/Journal';
+import Update from './Components/Update';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/support" element={<Support/>}/>
         <Route path="/journal/entry/:id" element={<Journal/>}/>
+        <Route path="/update/:id" element={<Update/>}/>
        </Routes>       
     </Router>
     );

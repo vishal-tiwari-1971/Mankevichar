@@ -10,7 +10,17 @@ const auth= require('../middleware/auth')
 // Get all journal entries
 exports.getAllEntries = async (req, res) => {
     try {
-        const journals = await Journal.find(); 
+        const journals = await Journal.find({visibility:"public"}); 
+        return res.status(200).json(journals);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Error retrieving journal entries.");
+    }
+}; 
+// Get journal entries by id
+exports.getEntryById = async (req, res) => {
+    try {
+        const journals = await Journal.findById(req.params.id);  
         return res.status(200).json(journals);
     } catch (error) {
         console.log(error);
@@ -160,11 +170,10 @@ exports.deleteEntry = async (req, res) => {
 
             console.log('Cloudinary Response:', cloudinaryResponse);  // Log the Cloudinary response for debugging
 
-            // Check if Cloudinary responded with a valid result
-        //     if (cloudinaryResponse.result !== 'ok') {
-        //         console.log('Failed to delete image from Cloudinary');
-        //         return res.status(500).send('Error deleting image from Cloudinary');
-        //     }
+            if (cloudinaryResponse.result !== 'ok') {
+                console.log('Failed to delete image from Cloudinary');
+                return res.status(500).send('Error deleting image from Cloudinary');
+            }
         }
 
          // Delete the journal entry from the database

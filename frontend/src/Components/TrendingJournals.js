@@ -1,17 +1,18 @@
-import { React, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Spinner from './Spinner';
+import { React, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Spinner from "./Spinner";
 
 const TrendingJournal = () => {
   const [journalList, setJournalList] = useState([]);
+  const [likedJournals, setLikedJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get('/journal/entries');
+        const response = await axios.get("/journal/entries");
         setJournalList(response.data);
       } catch (error) {
         setError(error.message);
@@ -19,22 +20,58 @@ const TrendingJournal = () => {
         setLoading(false);
       }
     };
+
+    const fetchLikedJournals = () => {
+      const storedLikedJournals =
+        JSON.parse(localStorage.getItem("likedJournals")) || [];
+      setLikedJournals(storedLikedJournals);
+    };
+
     getJournals();
+    fetchLikedJournals();
   }, []);
 
-  const toggleLike = async (id, liked) => {
+  // Handle like/unlike
+  const toggleLike = async (journalId) => {
     try {
-      const response = await axios.put(`/journal/like/${id}`, { liked: !liked });
-      setJournalList((prevList) =>
-        prevList.map((journal) =>
-          journal._id === id ? { ...journal, liked: !liked, likes: response.data.likes } : journal
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("Please log in to like a journal.");
+        return;
+      }
+
+      const { data } = await axios.post(
+        `/journal/${journalId}/like`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Update liked journals in state and localStorage
+      const updatedLikedJournals = data.hasLiked
+        ? [...likedJournals, journalId]
+        : likedJournals.filter((id) => id !== journalId);
+
+      // Update the liked journals state and store it in localStorage
+      setLikedJournals(updatedLikedJournals);
+      localStorage.setItem(
+        "likedJournals",
+        JSON.stringify(updatedLikedJournals)
+      );
+
+      // Update the like count for the journal
+      setJournalList((prevJournalList) =>
+        prevJournalList.map((journal) =>
+          journal._id === journalId
+            ? { ...journal, likeCount: data.likeCount }
+            : journal
         )
       );
     } catch (err) {
-      console.error('Error toggling like', err);
+      console.error("Error toggling like:", err);
     }
   };
 
+  // Handle loading and error states
   if (loading) return <Spinner />;
   if (error) return <div>Error occurred</div>;
 
@@ -48,7 +85,10 @@ const TrendingJournal = () => {
       <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 dark:bg-gray-900">
           {journalList.map((journal) => (
-            <div className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col" key={journal._id}>
+            <div
+              className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
+              key={journal._id}
+            >
               <div className="w-full h-48 mb-2 overflow-hidden">
                 {journal.image ? (
                   <img
@@ -72,8 +112,9 @@ const TrendingJournal = () => {
                 {journal.content}
               </p>
               <div className="flex justify-between items-center">
-                <button onClick={() => toggleLike(journal._id, journal.liked)}>
-                  {journal.liked ? (
+                <button onClick={() => toggleLike(journal._id)}>
+                  {localStorage.getItem("authToken") &&
+                  likedJournals.includes(journal._id) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="white"
@@ -105,8 +146,13 @@ const TrendingJournal = () => {
                     </svg>
                   )}
                 </button>
-                <span className="text-gray-400 dark:text-white">{journal.likes} </span>
-                <button><Link to={`/journal/entry/${journal._id}`}>Read More</Link> </button>
+
+                <span className="text-gray-400 dark:text-white">
+                  {journal.likeCount}
+                </span>
+                <button>
+                  <Link to={`/journal/entry/${journal._id}`}>Read More</Link>{" "}
+                </button>
               </div>
             </div>
           ))}
