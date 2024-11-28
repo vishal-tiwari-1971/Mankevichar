@@ -4,8 +4,10 @@ const Navbar=()=> {
        <nav class="bg-white border-gray-200 dark:bg-gray-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <div class="flex gap-5">
+
         <img src="/images/logo-1.png" class="h-14" alt="mkv Logo" />
         {/* <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MKV</span> */}
+
         </div>
    
     <div class="hidden w-full md:block md:w-auto" id="navbar-default">

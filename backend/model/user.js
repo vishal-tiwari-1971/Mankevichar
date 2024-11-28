@@ -35,10 +35,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0, // Default value when a new user is created
   },
-  likesCount: {
-    type: Number,
-    default: 0,
-  },
+  likedJournals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Journal' }]
 });
 
 // Create the User model

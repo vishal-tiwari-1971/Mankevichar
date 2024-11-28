@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).send('Invalid email or password');
+            return res.status(404).send('User not found');
         }
 
         // Match the password

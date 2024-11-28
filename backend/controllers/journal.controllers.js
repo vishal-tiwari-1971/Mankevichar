@@ -18,10 +18,12 @@ exports.getAllEntries = async (req, res) => {
     }
 }; 
 
+
 // Get journal entries by id
 exports.getEntryById = async (req, res) => {
     try {
         const journals = await Journal.findById(req.params.id); 
+>>>>>>> main
         return res.status(200).json(journals);
     } catch (error) {
         console.log(error);
@@ -171,7 +173,7 @@ exports.deleteEntry = async (req, res) => {
 
             console.log('Cloudinary Response:', cloudinaryResponse);  // Log the Cloudinary response for debugging
 
-            // Check if Cloudinary responded with a valid result
+            // Check if Cloudinary responded with a valid resul
             if (cloudinaryResponse.result !== 'ok') {
                 console.log('Failed to delete image from Cloudinary');
                 return res.status(500).send('Error deleting image from Cloudinary');

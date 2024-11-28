@@ -7,7 +7,10 @@ const journalSchema = new mongoose.Schema({
   visibility: { type: String, enum: ['private', 'public'], default: 'private' },
   userId: { type: mongoose.Schema.Types.ObjectId, ref:'User' },
   createdAt: { type: Date, default: Date.now },
+  likeCount: { type: Number, default: 0 },
+  likes: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] },
  
+
 });
 
 const Journal = mongoose.model('Journal', journalSchema);
