@@ -11,7 +11,7 @@ import Profile from './Components/Profile';
 import Dashboard from './Components/Dashboard';
 import Support from './Components/Support';
 import Journal from './Components/Journal';
-import Update from './Components/Update';
+import Update from './Components/Update.Journal';
 
 
 

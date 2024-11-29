@@ -141,53 +141,52 @@ exports.updateEntry = async (req, res) => {
 // Delete a journal entry
 exports.deleteEntry = async (req, res) => {
     try {
-        const { id } = req.params; 
-        console.log('Received ID:', id);
-         // Check if the provided ID is a valid ObjectId
-         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).send('Invalid ID format');
+        const { id } = req.params;
+
+        // Validate Mongoose ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid journal ID format.' });
         }
-        // Use findByIdAndDelete to remove the journal entry
+
+        // Find the journal entry
         const journal = await Journal.findById(id);
-
-        // image URL to debug
-        console.log('Image URL:', journal.image);
-
         if (!journal) {
-            return res.status(404).send("Journal entry not found");
+            return res.status(404).json({ message: 'Journal entry not found.' });
         }
 
-         // Check if the logged-in user owns the journal entry
-         if (journal.userId.toString() !== req.user.id) {
-            return res.status(403).send("You are not authorized to delete this entry.");
-        }
+        // Delete the image from Cloudinary if exists
+        if (journal.image && journal.image.startsWith('https://res.cloudinary.com/')) {
+            const urlParts = journal.image.split('/uploads/');
+            if (urlParts.length > 1) {
+                const publicId = `uploads/${urlParts[1].split('.')[0]}`; // Extract the public ID with folder
 
-          // If there is an associated image, delete it from Cloudinary
-         if (journal.image) {
-            const publicId = path.basename(journal.image, path.extname(journal.image));  // Extract the public ID from the URL
-
-            console.log('Extracted Public ID:', publicId);  // Log the extracted public ID for debugging
-
-            // Delete the image from Cloudinary using the public ID
-            const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
-
-            console.log('Cloudinary Response:', cloudinaryResponse);  // Log the Cloudinary response for debugging
-
-            // Check if Cloudinary responded with a valid resul
-            if (cloudinaryResponse.result !== 'ok') {
-                console.log('Failed to delete image from Cloudinary');
-                return res.status(500).send('Error deleting image from Cloudinary');
+                try {
+                    const cloudinaryResponse = await cloudinary.uploader.destroy(publicId);
+                    console.log('Image deleted from Cloudinary:', cloudinaryResponse);
+                    
+                    if (cloudinaryResponse.result !== 'ok' && cloudinaryResponse.result !== 'not found') {
+                        console.error('Cloudinary deletion error:', cloudinaryResponse);
+                        return res.status(500).json({ message: 'Error deleting image from Cloudinary.' });
+                    }
+                } catch (cloudError) {
+                    console.error('Cloudinary API error:', cloudError);
+                    return res.status(500).json({ message: 'Cloudinary image deletion failed.' });
+                }
+            } else {
+                console.warn('Image URL does not match expected format:', journal.image);
             }
+        } else {
+            console.info('No valid Cloudinary image to delete.');
         }
 
-         // Delete the journal entry from the database
-         await Journal.findByIdAndDelete(id);
-
-        return res.status(200).send("Journal entry deleted successfully");
+        // Delete the journal entry
+        await Journal.findByIdAndDelete(id);
+         console.log("Deleted journal entry with ID:", id);
+         
+        return res.status(200).json({ message: 'Journal entry deleted successfully.' });
     } catch (error) {
-        console.log(error);
-        return res.status(500).send("There was an error deleting the journal entry.");
+        console.error('Delete entry error:', error);
+        return res.status(500).json({ message: 'Error deleting the journal entry.' });
     }
 };
-
  
