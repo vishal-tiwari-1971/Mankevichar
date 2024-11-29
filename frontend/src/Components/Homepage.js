@@ -14,9 +14,8 @@ const HomePage = () => {
 <Navbar/>
 
 
-
 <section class="bg-white dark:bg-gray-900">
-    <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+    <div class="grid  max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div class="mr-auto place-self-center lg:col-span-7">
             <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">Write, Reflect, and Share: A Simple Way to Keep Your Diary</h1>
             <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Writing your thoughts has never been easier. Whether you're jotting down daily reflections or sharing longer stories with the world, our platform makes it simple to get started. Explore trending diaries from other users, create your own, and build a diary.</p>
@@ -29,7 +28,7 @@ const HomePage = () => {
             </Link> 
         </div>
         <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-            <img class="bg-black" src="https://th.bing.com/th/id/OIP.V-mRH8CuHEj3V4D6nRDAzgHaHa?w=650&h=650&rs=1&pid=ImgDetMain" alt="mockup"/>
+            <img class="bg-black" src="https://images.pexels.com/photos/8035295/pexels-photo-8035295.jpeg?auto=compress&cs=tinysrgb&w=600" alt="mockup"/>
         </div>                
     </div>
 </section>

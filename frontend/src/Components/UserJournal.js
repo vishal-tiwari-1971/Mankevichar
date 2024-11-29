@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Spinner from "./Spinner";
 
 const UserJournal = () => {
@@ -39,6 +39,30 @@ const UserJournal = () => {
     fetchJournals();
   }, []);
 
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this journal?");
+    if (!confirmDelete) return;
+
+    const token = localStorage.getItem("authToken");
+
+    try {
+      const response = await axios.delete(`/journal/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        // Remove the deleted journal from the UI
+        setUserJournal(userJournal.filter((journal) => journal._id !== id));
+      } else {
+        setError("An error occurred while deleting the journal.");
+      }
+    } catch (error) {
+      setError("An error occurred while deleting the journal.");
+    }
+  };
+
   if (isLoading) return <Spinner />;
   if (error) {
     return (
@@ -63,26 +87,19 @@ const UserJournal = () => {
   }
 
   if (userJournal.length === 0) {
-    return (
-      <h2>
-        You haven't created any journals yet. Start writing your first journal
-        now!
-      </h2>
-    );
+    return <h2>You haven't created any journals yet. Start writing your first journal now!</h2>;
   }
 
   return (
     <section className="bg-white dark:bg-gray-900">
-      <h1 className="text-3xl font-bold mb-6 dark:text-white">
-        Your Dashboard
-      </h1>
+      <h1 className="text-3xl font-bold mb-6 dark:text-white">Your Dashboard</h1>
       <h2 className="text-2xl font-semibold mb-4">Your Uploaded Journals</h2>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {userJournal.map((journal) => (
             <div
               className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
-              key={journal.id}
+              key={journal._id}
             >
               <div className="w-full h-48 mb-2 overflow-hidden">
                 <img src={journal.image} alt={journal.title} />
@@ -93,13 +110,16 @@ const UserJournal = () => {
               <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">
                 {journal.content}
               </p>
-              <div class="flex space-x-2 mt-4">
+              <div className="flex space-x-2 mt-4">
                 <Link to={`/update/${journal._id}`}>
-                  <button class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800">
+                  <button className="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800">
                     Update
                   </button>
                 </Link>
-                <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  onClick={() => handleDelete(journal._id)}
+                >
                   Delete
                 </button>
               </div>
