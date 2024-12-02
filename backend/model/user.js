@@ -35,7 +35,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0, // Default value when a new user is created
   },
-  likedJournals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Journal' }]
+  likedJournals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Journal' }],
+  otp: { type: String }, // Store OTP
+  otpExpiration: { type: Date }, // Store OTP expiration time
+  isVerified: { type: Boolean, default: false },
 });
 
 // Create the User model

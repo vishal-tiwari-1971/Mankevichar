@@ -22,18 +22,18 @@ const Profile = () => {
 
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`, // Pass token for authentication
+            Authorization: `Bearer ${token}`,
           },
         };
 
         const { data } = await axios.get('/user/profile', config);
-        setProfile(data);
         console.log('Profile Data:', data);
+        setProfile(data);
       } catch (error) {
         console.error('Error fetching profile:', error);
-        setProfile(null); // Set profile to null in case of error
+        setProfile(null);
       } finally {
-        setLoading(false); // Stop the spinner
+        setLoading(false);
       }
     };
 
@@ -42,21 +42,29 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/user/logout'); // Logout request
-      localStorage.removeItem('authToken'); // Clear token
-      navigate('/'); // Redirect to home or login
+      const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      await axios.post('/user/logout', {}, config);
+      localStorage.removeItem('authToken');
+      navigate('/login');
     } catch (error) {
       console.error('Error during logout:', error);
     }
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
-  if (!profile) {
-    return navigate('/login');;
-  }
+  if (loading) return <Spinner />;
+  if (!profile) return navigate('/login');
 
   const formattedJoinDate = profile?.joinDate
     ? new Date(profile.joinDate).toLocaleDateString(undefined, {
@@ -70,8 +78,8 @@ const Profile = () => {
     <div className="dark:bg-gray-900">
       <Navbar />
       <div className="profile-container p-5 flex justify-center items-center">
-        <div className="bg-white bg-opacity-80 shadow-lg rounded-lg p-10 text-center w-80">
-          <h2 className="text-2xl font-semibold text-black">Your Profile</h2>
+        <div className="bg-white shadow dark:border rounded-lg p-10 dark:bg-gray-800 dark:border-gray-700 text-center w-80">
+          <h2 className="text-2xl font-semibold text-white">Your Profile</h2>
           <div className="flex justify-center">
             {profile.profilePicture ? (
               <img
@@ -84,11 +92,11 @@ const Profile = () => {
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-xl font-bold text-white">
             {profile?.firstName || 'Guest'} {profile?.lastName || ''}
           </h2>
-          <p className="text-sm text-gray-600">{profile?.email || 'Not Available'}</p>
-          <div className="flex justify-around mt-4 text-gray-800">
+          <p className="text-sm text-white">{profile?.email || 'Not Available'}</p>
+          <div className="flex justify-around mt-4 text-white">
             <div>
               <h3 className="text-lg font-bold">{formattedJoinDate}</h3>
               <p className="text-xs">Joining Date</p>
@@ -103,7 +111,13 @@ const Profile = () => {
             </div>
           </div>
           <div className="mt-6 space-y-3">
-            <button className="bg-blue-500 text-white py-2 px-4 rounded-md w-full hover:bg-blue-900 transition">
+            <button
+              onClick={() => {
+                console.log('Navigating to Edit Profile with ID:', profile?._id || profile?.id);
+                navigate(`/user/edit/${profile?._id || profile?.id}`);
+              }}
+              className="bg-blue-500 text-white py-2 px-4 rounded-md w-full hover:bg-blue-900 transition"
+            >
               Edit
             </button>
             <button
