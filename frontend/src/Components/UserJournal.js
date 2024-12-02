@@ -66,29 +66,47 @@ const UserJournal = () => {
   if (isLoading) return <Spinner />;
   if (error) {
     return (
-      <div className="text-center">
-        <h2>{error}</h2>
-        <div className="mt-4">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-            onClick={() => navigate("/login")}
-          >
-            Log In
-          </button>
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            onClick={() => navigate("/signup")}
-          >
-            Sign Up
-          </button>
-        </div>
-      </div>
-    );
+      <div className="flex flex-col items-center  h-screen ">
+  <h1 className="text-2xl  font-semibold dark:text-white mt-[15%]">
+    {"You need to log in or sign up to continue."}
+  </h1>
+
+  <div className=" flex space-x-4 mt-5">
+    <button
+      className="px-6 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md font-medium transition-all"
+      onClick={() => navigate('/Login')}
+    >
+      Login
+    </button>
+    <button
+      className="px-6 py-3 text-white bg-green-600 hover:bg-green-700 rounded-lg shadow-md font-medium transition-all"
+      onClick={() => navigate('/Signup')}
+    >
+      Sign Up
+    </button>
+  </div>
+</div>
+
+    )
   }
 
   if (userJournal.length === 0) {
-    return <h2>You haven't created any journals yet. Start writing your first journal now!</h2>;
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
+        <h1 className="text-2xl pb-3 font-bold text-gray-900 dark:text-white">
+          No journals found. Please upload a journal to view it here.
+        </h1>
+        <button
+          className="px-6 py-3 mt-4 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md font-medium transition-all"
+          onClick={() => navigate('/Create')}
+        >
+          Create Journal
+        </button>
+      </div>
+    );
   }
+  
+  
 
   return (
     <section className="bg-white dark:bg-gray-900">
@@ -102,7 +120,20 @@ const UserJournal = () => {
               key={journal._id}
             >
               <div className="w-full h-48 mb-2 overflow-hidden">
-                <img src={journal.image} alt={journal.title} />
+              {journal.image ? (
+                  <img
+                    className="w-full h-full object-contain object-center"
+                    src={journal.image}
+                    alt={journal.title}
+                    loading="lazy"
+                  />
+                ) : (
+                  <img
+                    src={`https://placehold.co/800?text=${journal.title}&font=roboto`}
+                    className="w-full h-full object-contain object-center"
+                    alt={journal.title}
+                  />
+                )}
               </div>
               <h3 className="text-lg font-semibold mb-2 text-center text-white">
                 {journal.title}

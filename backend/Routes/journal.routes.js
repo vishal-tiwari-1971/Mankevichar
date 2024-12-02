@@ -25,10 +25,14 @@ router.post('/:id/like', auth, async (req, res) => {
     const journalId = req.params.id;
     const userId = req.user.id; // Assume user ID from JWT
 
+    // Find the journal to like/unlike
     const journal = await Journal.findById(journalId);
     if (!journal) {
       return res.status(404).json({ message: 'Journal not found' });
     }
+
+
+
 
     // Ensure `likes` is an array
     if (!Array.isArray(journal.likes)) {
@@ -41,14 +45,22 @@ router.post('/:id/like', auth, async (req, res) => {
       // Unlike the journal
       journal.likes.pull(userId);
       journal.likeCount--;
+
+      // Remove journal ID from user's liked journals
+      await User.findByIdAndUpdate(userId, { $pull: { likedJournals: journalId } });
     } else {
       // Like the journal
       journal.likes.push(userId);
       journal.likeCount++;
+
+      // Add journal ID to user's liked journals
+      await User.findByIdAndUpdate(userId, { $push: { likedJournals: journalId } });
     }
 
+    // Save the journal after updating likes and likeCount
     await journal.save();
 
+    // Send response with updated likeCount and like status
     res.status(200).json({ likeCount: journal.likeCount, hasLiked: !hasLiked });
   } catch (error) {
     console.error('Error toggling like:', error);

@@ -2,56 +2,118 @@ const User = require('../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/mailer.js');
+const crypto = require('crypto');
 
 // Signup logic
 exports.signup = async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
-
-        if (!(firstName && lastName && email && password)) {
-            return res.status(401).send("Please fill all the required fields");
-        }
-
-        // Checking if the email is unique
-        const existUser = await User.findOne({ email });
-        if (existUser) {
-            return res.status(400).send("User already registered with this email");
-        }
-
-        // Password encryption
-        const encryptPassword = await bcrypt.hash(password, 10);
-
-        // Save the user to the database
-        const user = await User.create({
-            firstName,
-            lastName,
-            email,
-            password: encryptPassword
-        });
-
-        // Generate JWT token (now returned after signup)
-        const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
-        user.token = token;
-        user.password = undefined;
-
-        // Send confirmation email after successful signup
-        const subject = 'Welcome to Our Journal';
-        const text = `Hello ${firstName},\n\nWelcome to our journal website! We're excited to have you.`;
-        const html = `<h1>Welcome to Our Journal</h1><p>Hello ${firstName},</p><p>Welcome to our journal website! We're excited to have you.</p>`;
-
-        await sendMail(email, subject, text, html);
-
-        // Return the token to the frontend
-        return res.status(201).json({
-            message: "Registered successfully",
-            token,  // Sending token directly after signup
-            user
-        });
+      console.log('Received data:', req.body);
+  
+      const { firstName, lastName, email, password } = req.body;
+  
+      // Check for missing fields
+      if (!(firstName && lastName && email && password)) {
+        return res.status(401).send("Please fill all the required fields");
+      }
+  
+      // Check if the email is unique
+      const existUser = await User.findOne({ email });
+      if (existUser) {
+        return res.status(400).send("User already registered with this email");
+      }
+  
+      console.log("Email is unique, proceeding to password encryption...");
+  
+      // Password encryption
+      const encryptPassword = await bcrypt.hash(password, 10);
+      console.log('Encrypted Password:', encryptPassword);
+  
+      // Create a new user object
+      const user = new User({
+        firstName,
+        lastName,
+        email,
+        password: encryptPassword,
+      });
+  
+      console.log("Created user object, starting validation...");
+  
+      // Validate the user object (using async/await)
+      await user.validate(); // This will throw an error if validation fails
+  
+      console.log("Validation passed, saving user...");
+  
+      // Save the user to the database
+      await user.save();
+  
+      // Generate JWT token
+      const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
+  
+      // Send OTP (assuming you have sendMail logic)
+      const otp = crypto.randomBytes(3).toString('hex');
+      const otpExpiration = new Date();
+      otpExpiration.setMinutes(otpExpiration.getMinutes() + 10);
+  
+      user.otp = otp;
+      user.otpExpiration = otpExpiration;
+      await user.save();
+  
+      await sendMail(email, otp);
+  
+      // Respond with success
+      res.status(201).json({
+        message: "Registered successfully. OTP sent to your email. Please verify it.",
+        token,
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+      }); 
     } catch (error) {
-        console.log(error);
-        return res.status(500).send("There was an error during signup.");
+      console.error("Error during signup:", error);
+      if (error.name === "ValidationError") {
+        return res.status(400).send(`Validation failed: ${error.message}`);
+      }
+      return res.status(500).send("There was an error during signup.");
     }
-};
+  };
+  
+  
+// OTP verification logic
+exports.verifyOtp = async (req, res) => {
+    const { email, otp } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      // Check if OTP matches and is not expired
+      if (user.otp !== otp) {
+        return res.status(400).send('Invalid OTP');
+      }
+  
+      if (new Date() > user.otpExpiration) {
+        return res.status(400).send('OTP has expired');
+      }
+  
+      // Mark user as verified
+      user.isVerified = true;
+      user.otp = undefined; // Clear OTP
+      user.otpExpiration = undefined; // Clear expiration time
+      await user.save();
+  
+      // Return success message
+      res.status(200).send('Email verified successfully');
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send('Error during OTP verification');
+    }
+  };
+  
 
 // Login logic
 exports.login = async (req, res) => {

@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import React, { useEffect } from'react';
 import HomePage from './Components/Homepage'; // Import your HomePage
 import CreateDiaryPage from './Components/Create'
 // import Navbar from './Components/Navbar'
@@ -12,18 +14,34 @@ import Dashboard from './Components/Dashboard';
 import Support from './Components/Support';
 import Journal from './Components/Journal';
 import Update from './Components/Update.Journal';
-
-
-
+import EditProfilePage from './Components/EditProfilePage';
+import VerifyOtpPage from "./Components/VerifyOtpPage";
 function App() {
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (token) {
+      try {
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        if (decodedToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem('authToken'); // Remove expired token
+        }
+      } catch (error) {
+        console.error('Invalid token:', error);
+        localStorage.removeItem('authToken');
+      }
+    }
+  }, []);
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create" element={<CreateDiaryPage />} />
         <Route path="/signup" element={<Signup/>}/>
+        <Route path="/verify-otp" element={<VerifyOtpPage/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/user/edit/:id" element={<EditProfilePage/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/support" element={<Support/>}/>
         <Route path="/journal/entry/:id" element={<Journal/>}/>
