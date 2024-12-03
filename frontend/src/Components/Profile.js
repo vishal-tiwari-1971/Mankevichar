@@ -59,12 +59,14 @@ const Profile = () => {
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {
+      
       console.error('Error during logout:', error);
     }
   };
 
   if (loading) return <Spinner />;
-  if (!profile) return navigate('/login');
+  if (!profile) return navigate('/login')
+    ;
 
   const formattedJoinDate = profile?.joinDate
     ? new Date(profile.joinDate).toLocaleDateString(undefined, {

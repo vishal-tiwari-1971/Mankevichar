@@ -75,4 +75,3 @@ router.put('/update/:id', auth, upload.single('image'), journalController.update
 router.delete('/delete/:id', auth, journalController.deleteEntry);
 
 module.exports = router;  
-

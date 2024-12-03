@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
   },
   likedJournals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Journal' }],
   otp: { type: String }, // Store OTP
+  otpSentAt: Date,
   otpExpiration: { type: Date }, // Store OTP expiration time
   isVerified: { type: Boolean, default: false },
 });
