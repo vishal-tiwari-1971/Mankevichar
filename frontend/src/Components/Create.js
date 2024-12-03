@@ -46,6 +46,7 @@ const CreateDiaryPage = () => {
       }
       navigate('/dashboard'); // Redirect to dashboard after submission
     } catch (error) {
+      
       console.error('Error submitting data:', error);
     }
   };

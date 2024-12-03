@@ -30,7 +30,8 @@ const submitData= async ()=>{
       alert("User not found. Please sign up first.");
     } else if (error.response.status === 401) {
       alert("Invalid password. Please try again.");
-    } else {
+    }
+     else {
       alert("An error occurred. Please try again later.");
     }
   }

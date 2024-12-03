@@ -5,7 +5,9 @@ const Navbar=()=> {
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <div class="flex gap-5">
 
-    <img src="/images/logo-1.png" class="h-[100px]" alt="mkv Logo" />
+
+    <img src="/images/logo-1.png" class="h-[90px]" alt="mkv Logo" />
+
 
         {/* <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">MKV</span> */}
 

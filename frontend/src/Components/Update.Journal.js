@@ -67,12 +67,13 @@ const Update = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     submitData();
+    // Reset form fields after submission
     setTitle("");
     setContent("");
     setVisibility("private");
     setImage(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = ""; // Clear file input
     }
   };
 
@@ -136,6 +137,7 @@ const Update = () => {
           id="file_input"
           type="file"
           onChange={(event) => setImage(event.target.files[0])}
+          ref={fileInputRef}
         />
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">
           PNG, JPG or JPEG (MAX. 2 MB).
