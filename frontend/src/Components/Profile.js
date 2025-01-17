@@ -4,7 +4,9 @@ import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture';
 import Spinner from './Spinner';
+import { useBackendUrl } from "../Components/BackendContext"
 
+const backendUrl = useBackendUrl()
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,8 +27,8 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-
-        const { data } = await axios.get('/user/profile', config);
+       ;
+        const { data } = await axios.get(`${backendUrl}/user/profile`, config);
         console.log('Profile Data:', data);
         setProfile(data);
       } catch (error) {
@@ -55,7 +57,7 @@ const Profile = () => {
         },
       };
 
-      await axios.post('/user/logout', {}, config);
+      await axios.post(`${backendUrl}/user/logout`, {}, config);
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {

@@ -2,17 +2,20 @@ import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Spinner from "./Spinner";
+import { useBackendUrl } from "../Components/BackendContext"
+
+const backendUrl = useBackendUrl();
 
 const TrendingJournal = () => {
   const [journalList, setJournalList] = useState([]);
   const [likedJournals, setLikedJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-
+  
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get("/journal/entries");
+        const response = await axios.get(`${backendUrl}/journal/entries`);
         console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
@@ -42,7 +45,7 @@ const TrendingJournal = () => {
       }
 
       const { data } = await axios.post(
-        `/journal/${journalId}/like`,
+        `${backendUrl}/journal/${journalId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

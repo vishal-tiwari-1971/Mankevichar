@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
+import { useBackendUrl } from "../Components/BackendContext"
 
 const CreateDiaryPage = () => {
   const [title, setTitle] = useState('');
@@ -27,9 +28,9 @@ const CreateDiaryPage = () => {
     if (image) {
       formData.append('image', image); // Add image file
     }
-
+    const backendUrl = useBackendUrl(); // Access the backendUrl from context
     try {
-      const response = await axios.post('/journal/entries', formData, {
+      const response = await axios.post(`${backendUrl}/journal/entries`, formData, {
         headers: {
           withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',

@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Spinner from "./Spinner";
+import { useBackendUrl } from "../Components/BackendContext"
+
+const backendUrl = useBackendUrl();
 
 const UserJournal = () => {
   const [userJournal, setUserJournal] = useState([]);
@@ -21,7 +24,7 @@ const UserJournal = () => {
       }
 
       try {
-        const response = await axios.get(`/journal/dashboard`, {
+        const response = await axios.get(`${backendUrl}/journal/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
@@ -51,7 +54,7 @@ const UserJournal = () => {
     }
 
     try {
-      const response = await axios.delete(`/journal/delete/${id}`, {
+      const response = await axios.delete(`${backendUrl}/journal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

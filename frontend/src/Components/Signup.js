@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import SignInWithGoogle from "./SignInWithGoogle";
+import { useBackendUrl } from "../Components/BackendContext"
 
 const Signup = () => {
   const [userName, setuserName] = useState("");
@@ -41,7 +42,8 @@ const Signup = () => {
     };
 
     try {
-      const signupResponse = await axios.post("/user/signup", data);
+      const backendUrl = useBackendUrl();
+      const signupResponse = await axios.post(`${backendUrl}/user/signup`, data);
 
       if (signupResponse.status === 201) {
         // Redirect to OTP verification page
