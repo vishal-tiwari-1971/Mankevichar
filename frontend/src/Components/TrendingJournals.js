@@ -4,13 +4,14 @@ import axios from "axios";
 import Spinner from "./Spinner";
 import { useBackendUrl } from "../Components/BackendContext"
 
-const backendUrl = useBackendUrl();
+
 
 const TrendingJournal = () => {
   const [journalList, setJournalList] = useState([]);
   const [likedJournals, setLikedJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const backendUrl = useBackendUrl();
   
   useEffect(() => {
     const getJournals = async () => {

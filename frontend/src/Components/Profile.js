@@ -6,11 +6,12 @@ import ProfilePicture from './ProfilePicture';
 import Spinner from './Spinner';
 import { useBackendUrl } from "../Components/BackendContext"
 
-const backendUrl = useBackendUrl()
+
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const backendUrl = useBackendUrl()
 
   useEffect(() => {
     const fetchProfile = async () => {

@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { useBackendUrl } from "../Components/BackendContext"
 
+
 const CreateDiaryPage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -11,6 +12,7 @@ const CreateDiaryPage = () => {
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const backendUrl = useBackendUrl(); // Access the backendUrl from context
 
   useEffect(() => {
     const token = localStorage.getItem('authToken'); // Check if token exists
@@ -28,7 +30,7 @@ const CreateDiaryPage = () => {
     if (image) {
       formData.append('image', image); // Add image file
     }
-    const backendUrl = useBackendUrl(); // Access the backendUrl from context
+    
     try {
       const response = await axios.post(`${backendUrl}/journal/entries`, formData, {
         headers: {

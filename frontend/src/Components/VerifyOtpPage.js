@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useBackendUrl } from "../Components/BackendContext"
-const backendUrl = useBackendUrl();
+
 
 const VerifyOtpPage = () => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const VerifyOtpPage = () => {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const backendUrl = useBackendUrl();
   const email = location.state?.email;
   const password = location.state?.password;
 

@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [likedJournals, setLikedJournals] = useState([]);
   const [error, setError] = useState("");  // For storing error messages
   const navigate = useNavigate();
+  const backendUrl = useBackendUrl();
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -18,7 +19,7 @@ const Dashboard = () => {
     }
 
     const fetchLikedJournals = async () => {
-      const backendUrl = useBackendUrl();
+      
       try {
         const response = await axios.get(`${backendUrl}/user/liked-journals`, {
           headers: {

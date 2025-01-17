@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import Spinner from "./Spinner";
 import { useBackendUrl } from "../Components/BackendContext"
 
-const backendUrl = useBackendUrl();
+
 
 const UserJournal = () => {
   const [userJournal, setUserJournal] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate(); // For navigation to login/signup
+  const backendUrl = useBackendUrl();
 
   useEffect(() => {
     const fetchJournals = async () => {

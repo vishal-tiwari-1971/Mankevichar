@@ -11,6 +11,7 @@ const Login = () => {
   const [userPassword, setuserPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
+  const backendUrl = useBackendUrl();
   console.log(userEmail, userPassword);
 
   const navigate = useNavigate()
@@ -22,7 +23,7 @@ const Login = () => {
         email: userEmail,
         password: userPassword,
       }
-      const backendUrl = useBackendUrl();
+     
       const response = await axios.post(`${backendUrl}/user/login`, data)
       console.log(response);
 

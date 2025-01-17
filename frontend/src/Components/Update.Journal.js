@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useBackendUrl } from "../Components/BackendContext"
 
-const backendUrl = useBackendUrl(); 
+
 
 const Update = () => {
   const [title, setTitle] = useState("");
@@ -15,7 +15,7 @@ const Update = () => {
   const [successMessage, setSuccessMessage] = useState(""); // For success message
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-
+  const backendUrl = useBackendUrl(); 
   const { id } = useParams();
   console.log("Journal Id : ", id);
 
