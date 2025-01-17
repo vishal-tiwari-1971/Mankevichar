@@ -45,6 +45,11 @@ const UserJournal = () => {
 
     const token = localStorage.getItem("authToken");
 
+    if (!token) {
+      setError("You need to log in or sign up to continue.");
+      return;
+    }
+
     try {
       const response = await axios.delete(`/journal/delete/${id}`, {
         headers: {
@@ -93,7 +98,7 @@ const UserJournal = () => {
   if (userJournal.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
-        <h1 className="text-2xl pb-3 font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl pb-2 font-bold text-gray-900 dark:text-white">
           No journals found. Please upload a journal to view it here.
         </h1>
         <button

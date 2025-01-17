@@ -1,47 +1,72 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
 
 const VerifyOtpPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const email = location.state?.email;
+  const password = location.state?.password;
 
   if (!email) {
-    return <p className="text-red-500 text-center mt-4">Email is missing. Please try signing up again.</p>;
+    navigate("/signup");
+    return null;
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
+    setIsLoading(true);
+
+    const authToken = localStorage.getItem('authToken');
+
 
     try {
-      const response = await axios.post("/user/verify-otp", { email, otp });
+      const response = await axios.post('/user/verify-otp', { email, otp }, {
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${authToken}` // Include token if necessary
+        }
+      });
 
       if (response.status === 200) {
+        const loginData = { email, password };
+        const loginResponse = await axios.post("/user/login", loginData);
+
+        localStorage.setItem("authToken", loginResponse.data.token);
         navigate("/");
       }
     } catch (error) {
       if (error.response) {
-        // Handle error response (for invalid OTP, etc.)
-        if (error.response.status === 400) {
-          setErrorMessage("Invalid OTP. Please try again.");
-        } else {
-          setErrorMessage(error.response.data.message);
+        switch (error.response.status) {
+          case 400:
+            setErrorMessage("Invalid OTP. Please try again.");
+            break;
+          case 410:
+            setErrorMessage("OTP has expired. Please request a new one.");
+            break;
+          case 500:
+            setErrorMessage("Server error. Please try again later.");
+            break;
+          default:
+            setErrorMessage(
+              error.response.data.message || "An error occurred."
+            );
         }
       } else {
-        // Handle network/server errors
         setErrorMessage("An error occurred while connecting to the server.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
-      {/* <Navbar /> */}
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -74,9 +99,10 @@ const VerifyOtpPage = () => {
 
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Verify OTP
+                  {isLoading ? "Verifying..." : "Verify OTP"}
                 </button>
               </form>
             </div>

@@ -7,7 +7,7 @@ const TrendingJournal = () => {
   const [journalList, setJournalList] = useState([]);
   const [likedJournals, setLikedJournals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     const getJournals = async () => {
@@ -15,7 +15,7 @@ const TrendingJournal = () => {
         const response = await axios.get("/journal/entries");
         setJournalList(response.data);
       } catch (error) {
-        setError(error.message);
+        setErrorMessage(error.message);
       } finally {
         setLoading(false);
       }
@@ -36,7 +36,7 @@ const TrendingJournal = () => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
-        alert("Please log in to like a journal.");
+        setErrorMessage("Please log in to like a journal.");
         return;
       }
 
@@ -71,17 +71,63 @@ const TrendingJournal = () => {
     }
   };
 
+  // Handle cancel
+  const handleCancel = () => {
+    setErrorMessage(null); // Hides the error message
+  };
+
   // Handle loading and error states
   if (loading) return <Spinner />;
-  if (error) return <div>Error occurred</div>;
 
   return (
     <section className="bg-white dark:bg-gray-900">
+      <div className="flex items-center justify-between py-6 px-4">
+        {errorMessage && (
+          <div className="flex items-center p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md shadow-md relative">
+            <svg
+              className="w-6 h-6 mr-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l2 2m-2-2V6m0 8v4m0 0H8m4 0h4"
+              ></path>
+            </svg>
+            <span>{errorMessage}</span>
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={handleCancel}
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        )}
+      </div>
+
       <div className="flex justify-center">
         <h2 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white font-serif">
           Trending Diaries
         </h2>
       </div>
+
       <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 dark:bg-gray-900">
           {journalList.map((journal) => (
