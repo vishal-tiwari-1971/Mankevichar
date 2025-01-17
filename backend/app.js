@@ -30,9 +30,13 @@ app.use(cors({
   allowedHeaders: ['Content-Type']
 }));
 
-app.get("/", (req, res) => {
-  res.send("<h1>Welcome to Man Ke Vichar</h1> ")
-})
+app.get("/", (req, res) =>  (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+   });
 
 app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
