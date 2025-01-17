@@ -31,9 +31,6 @@ router.post('/:id/like', auth, async (req, res) => {
       return res.status(404).json({ message: 'Journal not found' });
     }
 
-
-
-
     // Ensure `likes` is an array
     if (!Array.isArray(journal.likes)) {
       journal.likes = []; // Initialize as empty array if undefined

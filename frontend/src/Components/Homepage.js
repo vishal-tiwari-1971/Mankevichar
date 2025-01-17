@@ -27,7 +27,7 @@ const HomePage = () => {
                 Login
             </Link> 
         </div>
-        <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
+        <div class="hidden lg:mt-0 lg:col-span-5 lg:flex rounded-xl shadow-lg">
             <img class="bg-black" src="https://images.pexels.com/photos/8035295/pexels-photo-8035295.jpeg?auto=compress&cs=tinysrgb&w=600" alt="mockup"/>
         </div>                
     </div>

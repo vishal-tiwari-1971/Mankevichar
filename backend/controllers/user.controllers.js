@@ -1,4 +1,5 @@
 const User = require('../model/user');
+const TempUser = require('../model/tempUser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/mailer.js');
@@ -7,6 +8,7 @@ const crypto = require('crypto');
 // Signup logic
 exports.signup = async (req, res) => {
   try {
+
     console.log('Received data:', req.body);
 
     const { name, email, password } = req.body;
@@ -14,49 +16,34 @@ exports.signup = async (req, res) => {
     // Check for missing fields
     if (!(name && email && password)) {
       return res.status(401).send("Please fill all the required fields");
+
     }
 
     // Check if the email is unique
-    const existUser = await User.findOne({ email });
+    const existUser = await User.findOne({ email }) || await TempUser.findOne({ email });
     if (existUser) {
       return res.status(400).send("User already registered with this email");
     }
-
-    console.log("Email is unique, proceeding to password encryption...");
-
+     console.log("Email is unique, proceeding to password encryption...");
     // Password encryption
     const encryptPassword = await bcrypt.hash(password, 10);
     console.log('Encrypted Password:', encryptPassword);
+    
+    // Generate OTP
+    const otp = crypto.randomBytes(3).toString('hex');
+    const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
 
-    // Create a new user object
-    const user = new User({
+    // Save data in TempUser collection
+    const tempUser = new TempUser({
       name,
       email,
       password: encryptPassword,
+      otp,
+      otpSentAt: new Date(),
+      otpExpiration,
     });
 
-    console.log("Created user object, starting validation...");
-
-    // Validate the user object (using async/await)
-    await user.validate(); // This will throw an error if validation fails
-
-    console.log("Validation passed, saving user...");
-
-    // Save the user to the database
-    await user.save();
-
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
-
-    // Send OTP (assuming you have sendMail logic)
-    const otp = crypto.randomBytes(3).toString('hex');
-    const otpExpiration = new Date();
-    otpExpiration.setMinutes(otpExpiration.getMinutes() + 10);
-
-    user.otp = otp;
-    user.otpExpiration = otpExpiration;
-    await user.save();
-
+    await tempUser.save();
     await sendMail(email, otp);
 
     // Respond with success
@@ -68,79 +55,57 @@ exports.signup = async (req, res) => {
         email: user.email,
       },
     });
-  } catch (error) {
+
+   } catch (error) {
     console.error("Error during signup:", error);
-    if (error.name === "ValidationError") {
-      return res.status(400).send(`Validation failed: ${error.message}`);
-    }
-    return res.status(500).send("There was an error during signup.");
+    res.status(500).send("There was an error during signup.");
   }
 };
-
-
 
 // OTP verification logic
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const tempUser = await TempUser.findOne({ email });
 
-    if (!user) {
-      return res.status(404).send('User not found');
+    if (!tempUser) {
+      return res.status(404).send('User not found or OTP expired');
     }
 
-    // Check if OTP matches and is not expired
-    if (user.otp !== otp) {
+    if (tempUser.otp !== otp) {
       return res.status(400).send('Invalid OTP');
     }
 
-    if (new Date() > user.otpExpiration) {
+    if (new Date() > tempUser.otpExpiration) {
+      await TempUser.deleteOne({ email });
       return res.status(400).send('OTP has expired');
     }
 
-    // Mark user as verified
-    user.isVerified = true;
-    user.otp = undefined; // Clear OTP
-    user.otpExpiration = undefined; // Clear expiration time
-    await user.save();
+    // Move user to the User collection
+    const user = new User({
+      name: tempUser.name,
+      email: tempUser.email,
+      password: tempUser.password,
+      profilePicture: '', // Default profile picture
+      joinDate: new Date(),
+      journalsCount: 0,
+      likedJournals: [],
+      isVerified: true,
+    });
 
-    // Return success message
-    res.status(200).send('Email verified successfully');
+    await user.save();
+    await TempUser.deleteOne({ email });
+
+    // Generate JWT token 
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.SECRET, { expiresIn: '2h' });
+
+    res.status(200).send('Email verified successfully and account created.');
   } catch (error) {
-    console.error(error);
-    return res.status(500).send('Error during OTP verification');
+    console.error("Error during OTP verification:", error);
+    res.status(500).send("There was an error during OTP verification.");
   }
 };
-
-// exports.resendOTP = async (req, res) => {
-//   const user = req.user; // Assuming user is authenticated
-//   if (!user) {
-//       return res.status(401).send("User not authenticated");
-//   }
-
-//   if (user.verified) {
-//       return res.status(400).send("User already verified.");
-//   }
-
-//   const currentTime = new Date();
-//   const timeDifference = (currentTime - user.otpSentAt) / (1000 * 60); // Difference in minutes
-
-//   if (timeDifference < 10) {
-//       return res.status(429).json({ message: 'Please wait before requesting a new OTP.' });
-//   }
-
-  // Generate a new OTP
-//   const newOtp = crypto.randomInt(100000, 999999).toString();
-//   user.otp = newOtp;
-//   user.otpSentAt = currentTime;
-
-//   //await user.save();
-
-//   // Send the OTP to user's email
-//   await sendMail(user.email, 'Your Verification OTP', `Your OTP is: ${newOtp}`);
-//   res.status(200).json({ message: 'New OTP sent to your email.' });
-// };
 
 
 // Login logic
@@ -181,7 +146,8 @@ exports.login = async (req, res) => {
     return res.status(200).cookie('token', token, options).json({
       success: true,
       token,
-      user
+      user,
+      message: 'Logged in successfully'
     });
   } catch (error) {
     console.error(error);

@@ -7,7 +7,6 @@ const upload = multer({ dest: 'uploads/' }); // or other configuration
 const path = require('path');
 const auth = require('../middleware/auth')
 
-
 // Get all journal entries
 exports.getAllEntries = async (req, res) => {
     try {
@@ -18,7 +17,6 @@ exports.getAllEntries = async (req, res) => {
         return res.status(500).send("Error retrieving journal entries.");
     }
 };
-
 
 // Get journal entries by id
 exports.getEntryById = async (req, res) => {
@@ -31,7 +29,6 @@ exports.getEntryById = async (req, res) => {
         return res.status(500).send("Error retrieving journal entries.");
     }
 };
-
 
 // Get journal by User Id
 exports.getUSerJournal = [auth, async (req, res) => {
@@ -79,7 +76,6 @@ exports.createEntry = async (req, res) => {
         return res.status(500).send("Error creating journal entry.");
     }
 };
-
 
 // Update a journal entry
 exports.updateEntry = async (req, res) => {

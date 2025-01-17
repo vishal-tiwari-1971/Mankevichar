@@ -18,14 +18,19 @@ const Signup = () => {
   };
 
   const submitData = async () => {
+
     // Basic validation for frontend fields
     if (!userName || !userEmail || !userPassword) {
+    
+
       setErrorMessage("All fields are required.");
       return;
     }
-  
+
     if (!validatePassword(userPassword)) {
-      setErrorMessage("Password must be at least 6 characters long.");
+      setErrorMessage(
+        "Password must be at least 6 characters long, with at least one letter and one number."
+      );
       return;
     }
 
@@ -35,42 +40,18 @@ const Signup = () => {
       password: userPassword,
     };
 
-    // Debugging log
-    console.log("Data being sent to the backend:", data); 
-
     try {
-      // Send data to the backend for signup
       const signupResponse = await axios.post("/user/signup", data);
 
-      // Now, log the user in immediately
-      const loginData = {
-        email: userEmail,
-        password: userPassword,
-      };
-
-      const loginResponse = await axios.post("/user/login", loginData);
-
-      // Store the token from the login response
-      localStorage.setItem("authToken", loginResponse.data.token);
-
-      // Log the login response for debugging
-      console.log("Login response:", loginResponse);
-
-      // If signup is successful, redirect the user to the OTP verification page
       if (signupResponse.status === 201) {
-        navigate("/verify-otp", { state: { email: userEmail } });
+        // Redirect to OTP verification page
+        navigate("/verify-otp", { state: { email: userEmail, password: userPassword } });
       }
     } catch (error) {
-      // Handle errors gracefully
-      if (error.response) {
-        // Backend error with a response (e.g., validation or server errors)
-        console.error("Signup error:", error.response.data);
-        setErrorMessage(error.response.data.message || "An error occurred during signup.");
-      } else {
-        // Network or other errors
-        console.error("Error:", error.message);
-        setErrorMessage("An error occurred while connecting to the server.");
-      }
+      console.error("Signup error:", error.response || error);
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred during signup."
+      );
     }
   };
 
@@ -90,9 +71,25 @@ const Signup = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an account
               </h1>
+              {/* Display error message */}
               {errorMessage && (
-                <div className="text-red-500 text-sm">{errorMessage}</div> // Display error messages
+                <div className="flex items-center bg-red-100 text-red-700 p-4 rounded-lg mb-4 shadow-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 9v2m0 4v.01M6 3h12c1.1 0 1.99.9 1.99 2L20 19c0 1.1-.9 2-1.99 2H4c-1.1 0-1.99-.9-1.99-2L4 5c0-1.1.9-2 1.99-2z" />
+                  </svg>
+                  <span>{errorMessage}</span>
+                </div>
               )}
+
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
