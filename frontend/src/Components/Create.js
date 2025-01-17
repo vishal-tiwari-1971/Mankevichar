@@ -31,6 +31,7 @@ const CreateDiaryPage = () => {
     try {
       const response = await axios.post('/journal/entries', formData, {
         headers: {
+          withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },

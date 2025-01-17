@@ -90,12 +90,12 @@ const Profile = () => {
                 className="rounded-full w-24 h-24 object-cover mb-4"
               />
             ) : (
-              <ProfilePicture name={profile?.firstName || 'User'} />
+              <ProfilePicture name={profile?.name || 'User'} />
             )}
           </div>
 
           <h2 className="text-xl font-bold text-white">
-            {profile?.firstName || 'Guest'} {profile?.lastName || ''}
+            {profile?.name || 'Guest'}
           </h2>
           <p className="text-sm text-white">{profile?.email || 'Not Available'}</p>
           <div className="flex justify-around mt-4 text-white">

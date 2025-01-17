@@ -2,12 +2,7 @@ const mongoose = require('mongoose');
 
 // Creating schema for user
 const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  lastName: {
+  name: {
     type: String,
     required: true,
     trim: true,
@@ -20,12 +15,18 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    minlength: 8,
+    required:false,
+    // minlength: 8,
+    default:"",
   },
   profilePicture: {
     type: String,
     default: '', // Default image URL if none is provided
+  },
+  firebaseuid:{
+    type: String,
+    unique:true,
+    default:"",
   },
   joinDate: {
     type: Date,

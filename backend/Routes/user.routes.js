@@ -11,6 +11,9 @@ const bcrypt = require('bcryptjs');
 // Route for signup
 router.post('/signup', userController.signup);
 
+// Route for registering using Google
+router.post("/google-login",userController.googleLogin)
+
 // Route for sending OTP
 router.post('/verify-otp', userController.verifyOtp);
 
@@ -37,8 +40,7 @@ router.get('/profile', auth, async (req, res) => {
     // Return the user's profile data
     res.json({
       id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      name: user.name,
       email: user.email,
       joinDate: user.joinDate,
       journals: journalsCount,
@@ -72,7 +74,7 @@ router.get('/liked-journals', auth, async (req, res) => {
 // Edit Profile Route
 router.put('/edit/:id', auth, async (req, res) => {
   const { id } = req.params;
-  const { firstName, lastName, password } = req.body;
+  const { name, password } = req.body;
 
   console.log('Editing Profile for ID:', id);
   console.log('Payload Received:', req.body);
@@ -88,8 +90,8 @@ router.put('/edit/:id', auth, async (req, res) => {
     }
 
     // Validate fields
-    if (firstName && typeof firstName === 'string') user.firstName = firstName;
-    if (lastName && typeof lastName === 'string') user.lastName = lastName;
+   
+    if (name && typeof name === 'string') user.name = name;
     if (password && typeof password === 'string' && password.length >= 6) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);

@@ -69,41 +69,24 @@ const EditProfilePage = () => {
           <form onSubmit={handleSubmit} className="space-y-5 mt-5">
             <div>
               <label
-                htmlFor="firstName"
+                htmlFor="name"
                 className="block text-sm font-medium text-white"
               >
-                First Name
+                Name
               </label>
               <input
                 type="text"
                 
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
+                id="name"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter first name"
+                placeholder="Enter name"
                 required
               />
             </div>
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-white"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full mt-1 p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter last name"
-                required
-              />
-            </div>
+            
             <div>
               <label
                 htmlFor="password"

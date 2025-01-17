@@ -9,10 +9,10 @@ exports.signup = async (req, res) => {
   try {
     console.log('Received data:', req.body);
 
-    const { firstName, lastName, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Check for missing fields
-    if (!(firstName && lastName && email && password)) {
+    if (!(name && email && password)) {
       return res.status(401).send("Please fill all the required fields");
     }
 
@@ -30,8 +30,7 @@ exports.signup = async (req, res) => {
 
     // Create a new user object
     const user = new User({
-      firstName,
-      lastName,
+      name,
       email,
       password: encryptPassword,
     });
@@ -65,8 +64,7 @@ exports.signup = async (req, res) => {
       message: "Registered successfully. OTP sent to your email. Please verify it.",
       token,
       user: {
-        firstName: user.firstName,
-        lastName: user.lastName,
+        name: user.name,
         email: user.email,
       },
     });
@@ -191,7 +189,67 @@ exports.login = async (req, res) => {
   }
 };
 
+// Google-Login Logic
+exports.googleLogin= async (req,res)=> {
+  const {name,email,photoUrl,uid}= req.body;
+  try{
+    const user = await User.findOne({ firebaseuid: uid }) || await User.findOne({ email });
+  console.log(user);
+  
 
+    if(!user)
+    {
+      const user= new User(
+        {
+          name,
+          email,
+          profilePicture:photoUrl,
+          firebaseuid: uid,
+          isVerified:true,
+        }
+        
+        
+      )
+      console.log(user);
+      try {
+        await user.save();
+    } catch (err) {
+        console.error('Error saving user:', err.message);
+    }
+    
+    }
+    // else {
+    //   // If the user exists, update the Firebase UID (if not already set)
+    //   if (!user.firebaseUid || user.firebaseUid !== uid) {
+    //     user.firebaseUid = uid;
+    //     user.name = displayName; // Optional: Update displayName
+    //     user.photoURL = photoURL; // Optional: Update photoURL
+    //     await user.save(); // Save the updated user
+    //   }
+    // }
+   // generating token
+   const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
+   user.password = undefined; // Remove password from the response
+   user.token = token;
+
+    // Set token as a cookie and send response
+    const options = {
+      expires: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000), // 4 days
+      httpOnly: true // Protect from XSS attacks
+    };
+
+    return res.status(200).cookie('token', token, options).json({
+      success: true,
+      token,
+      user
+    });
+    
+
+  }
+  catch(error) {
+    res.status(500).json({message:"Getting error",error})
+  }
+}
 // Logout logic
 exports.logout = (req, res) => {
   try {
@@ -199,7 +257,10 @@ exports.logout = (req, res) => {
     res.clearCookie("token");
 
     // Send a response back indicating the user has been logged out
-    return res.status(200).json({ message: "Logged out successfully" });
+    return res.status(200).json({
+       message: "Logged out successfully",
+        // googleLogoutUrl: "https://accounts.google.com/logout"
+     });
   } catch (error) {
     console.error(error);
     return res.status(500).send("There was an error during logout.");

@@ -2,19 +2,21 @@ require("dotenv").config()
 // to access jwt
 const jwt = require('jsonwebtoken')
 
-const auth = (req, res, next) => {
+const auth =(req, res, next) => {
   console.log(req.cookies);
   const { token } = req.cookies
+  console.log(token);
+  
   // || req.header||req.body
   // or {token}=req.cookies  token=req.cookies.token
 
   // if token is exist
   if (!(token)) {
-    res.status(403).send('login  in again token missing')
+    return res.status(403).send('login  in again token missing')
   }
   //  to verify token
   try {
-    const decode = jwt.verify(token, process.env.SECRET)
+    const decode =jwt.verify(token, process.env.SECRET)
     console.log(decode);
     req.user = decode
 

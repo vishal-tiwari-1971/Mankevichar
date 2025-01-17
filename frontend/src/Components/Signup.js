@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "./Navbar";
+import SignInWithGoogle from "./SignInWithGoogle";
 
 const Signup = () => {
-  const [userFirstName, setuserFirstName] = useState("");
-  const [userLastName, setuserLastName] = useState("");
+  const [userName, setuserName] = useState("");
   const [userEmail, setuserEmail] = useState("");
   const [userPassword, setuserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // For displaying error messages
@@ -19,7 +19,7 @@ const Signup = () => {
 
   const submitData = async () => {
     // Basic validation for frontend fields
-    if (!userFirstName || !userLastName || !userEmail || !userPassword) {
+    if (!userName || !userEmail || !userPassword) {
       setErrorMessage("All fields are required.");
       return;
     }
@@ -30,8 +30,7 @@ const Signup = () => {
     }
 
     const data = {
-      firstName: userFirstName,
-      lastName: userLastName,
+      name: userName,
       email: userEmail,
       password: userPassword,
     };
@@ -97,38 +96,22 @@ const Signup = () => {
               <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
-                    htmlFor="firstName"
+                    htmlFor="Name"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    First Name
+                   Name
                   </label>
                   <input
                     type="text"
-                    name="firstName"
-                    id="firstName"
+                    name="Name"
+                    id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={userFirstName}
-                    onChange={(event) => setuserFirstName(event.target.value)}
+                    value={userName}
+                    onChange={(event) => setuserName(event.target.value)}
                     required
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="lastName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={userLastName}
-                    onChange={(event) => setuserLastName(event.target.value)}
-                    required
-                  />
-                </div>
+               
                 <div>
                   <label
                     htmlFor="email"
@@ -170,6 +153,7 @@ const Signup = () => {
                 >
                   Create an account
                 </button>
+                <SignInWithGoogle/>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
                   <Link
