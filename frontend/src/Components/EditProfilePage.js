@@ -12,6 +12,7 @@ const EditProfilePage = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
+  const backendUrl = useBackendUrl();
   const { id } = useParams();
       console.log("user id : ", id);
 
@@ -46,7 +47,7 @@ const EditProfilePage = () => {
           'Content-Type': 'application/json',
         },
       };
-      const backendUrl = useBackendUrl(); 
+       
       const { data } = await axios.put(`${backendUrl}/user/edit/${id}`, formData, config);
       console.log("Sent id :",id);
       

@@ -6,6 +6,7 @@ import { useBackendUrl } from "../Components/BackendContext"
 
 const SignInWithGoogle=()=> {
     const navigate=useNavigate()
+    const backendUrl = useBackendUrl();
     const handleGoogleLogin = async () => {
         const provider=new GoogleAuthProvider();
         signInWithPopup(auth,provider)
@@ -21,7 +22,7 @@ const SignInWithGoogle=()=> {
                 }
                 // saveUserToDatabase(userData)
                 try {
-                    const backendUrl = useBackendUrl();
+                    
                     // Send the user data to the backend using Axios
                     const response = await axios.post(`${backendUrl}/user/google-login`, userData);
                     const { token, user } = response.data; // Extract token and user data
