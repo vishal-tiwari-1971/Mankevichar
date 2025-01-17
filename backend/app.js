@@ -23,16 +23,17 @@ setInterval(async () => {
   await TempUser.deleteMany({ otpExpiration: { $lt: now } }); 
 }, 30000*60); 
 
-
-app.get("/", (req, res) => {
-  res.send("<h1>Welcome to Man Ke Vichar</h1> ")
-})
 // Enable CORS for your frontend URL (replace with your frontend URL)
 app.use(cors({
   origin: 'https://mankevichar-git-vishal-vishal-tiwaris-projects-86797c2a.vercel.app',  // Frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']
 }));
+
+app.get("/", (req, res) => {
+  res.send("<h1>Welcome to Man Ke Vichar</h1> ")
+})
+
 app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
 
