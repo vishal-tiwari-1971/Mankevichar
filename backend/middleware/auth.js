@@ -1,6 +1,6 @@
-require("dotenv").config()
-// to access jwt
-const jwt = require('jsonwebtoken')
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+
 
 const auth =(req, res, next) => {
   console.log(req.cookies);
@@ -17,14 +17,14 @@ const auth =(req, res, next) => {
   //  to verify token
   try {
     const decode =jwt.verify(token, process.env.SECRET)
-    console.log(decode);
+    console.log("Decoded Token:",decode);
     req.user = decode
 
-    return next()
-    // extract id from token and query to database
+    next();
   } catch (error) {
-    // token not varified
-    return res.status(403).send('token is invalid')
+    console.error("JWT verification error:", error.message);
+    return res.status(403).send("Invalid token, please log in again.");
   }
-}
-module.exports = auth
+};
+
+module.exports = auth;

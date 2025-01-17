@@ -2,33 +2,43 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import UserJournal from './UserJournal';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [likedJournals, setLikedJournals] = useState([]);
+  const [error, setError] = useState("");  // For storing error messages
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    console.log('Auth Token:', token);
+    if (!token) {
+      navigate('/login');
+    }
+
     const fetchLikedJournals = async () => {
       try {
         const response = await axios.get('/user/liked-journals', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        setLikedJournals(response.data); // Set liked journals data
+        setLikedJournals(response.data);
       } catch (error) {
+        setError("Failed to fetch liked journals. Please try again later.");  // Setting error message for UI
         console.error('Error fetching liked journals:', error);
       }
     };
 
     fetchLikedJournals();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="dark:bg-gray-900 text-white">
       <Navbar />
       <div className="dashboard-container p-6">
         <section>
-          <UserJournal /> {/* User's journal section */}
+          <UserJournal />
         </section>
 
         {/* Liked Journals Section */}
@@ -40,6 +50,11 @@ const Dashboard = () => {
           </div>
           <div className="container mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 dark:bg-gray-900">
+              {error && (
+                <p className="text-center text-xl text-red-500 dark:text-red-400">
+                  {error}
+                </p>
+              )}
               {likedJournals.length > 0 ? (
                 likedJournals.map((journal) => (
                   <div

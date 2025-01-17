@@ -7,16 +7,15 @@ const Journal = require('../model/journal');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Route for sending OTP
+router.post('/verify-otp', userController.verifyOtp);
 
 // Route for signup
 router.post('/signup', userController.signup);
 
+
 // Route for registering using Google
 router.post("/google-login",userController.googleLogin)
-
-// Route for sending OTP
-router.post('/verify-otp', userController.verifyOtp);
-
 
 // Route for login
 router.post('/login', userController.login);
