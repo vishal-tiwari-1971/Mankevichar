@@ -16,6 +16,8 @@ import Journal from './Components/Journal';
 import Update from './Components/Update.Journal';
 import EditProfilePage from './Components/EditProfilePage';
 import VerifyOtpPage from "./Components/VerifyOtpPage";
+import { BackendProvider } from "../src/Components/BackendContext"; // Import the provider
+
 function App() {
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -33,6 +35,8 @@ function App() {
     }
   }, []);
   return (
+    <BackendProvider>
+
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -48,6 +52,7 @@ function App() {
         <Route path="/update/:id" element={<Update/>}/>
        </Routes>       
     </Router>
+    </BackendProvider>
     );
 }
 

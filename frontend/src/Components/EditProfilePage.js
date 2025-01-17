@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import { useNavigate ,useParams} from 'react-router-dom';
+import { useBackendUrl } from "../Components/BackendContext"
 
 const EditProfilePage = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     password: '',
   });
   const [error, setError] = useState(null);
@@ -46,8 +46,8 @@ const EditProfilePage = () => {
           'Content-Type': 'application/json',
         },
       };
-  
-      const { data } = await axios.put(`/user/edit/${id}`, formData, config);
+      const backendUrl = useBackendUrl(); 
+      const { data } = await axios.put(`${backendUrl}/user/edit/${id}`, formData, config);
       console.log("Sent id :",id);
       
       setSuccess(data.message || 'Profile updated successfully!');

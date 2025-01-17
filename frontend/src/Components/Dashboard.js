@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import UserJournal from './UserJournal';
 import { useNavigate } from 'react-router-dom';
+import { useBackendUrl } from "../Components/BackendContext"
 
 const Dashboard = () => {
   const [likedJournals, setLikedJournals] = useState([]);
@@ -17,8 +18,9 @@ const Dashboard = () => {
     }
 
     const fetchLikedJournals = async () => {
+      const backendUrl = useBackendUrl();
       try {
-        const response = await axios.get('/user/liked-journals', {
+        const response = await axios.get(`${backendUrl}/user/liked-journals`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -85,7 +87,7 @@ const Dashboard = () => {
                     </p>
                     <div className="flex justify-end items-center">
                       <button>
-                        <a href={`/journal/entry/${journal._id}`}>Read More</a>
+                        <a href={`${backendUrl}/journal/entry/${journal._id}`}>Read More</a>
                       </button>
                     </div>
                   </div>

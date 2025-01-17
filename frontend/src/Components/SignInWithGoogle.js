@@ -2,6 +2,7 @@ import {GoogleAuthProvider,signInWithPopup} from "firebase/auth"
 import { auth } from '../firebase/firebase';
 import {useNavigate} from "react-router-dom";
 import axios from 'axios'
+import { useBackendUrl } from "../Components/BackendContext"
 
 const SignInWithGoogle=()=> {
     const navigate=useNavigate()
@@ -20,8 +21,9 @@ const SignInWithGoogle=()=> {
                 }
                 // saveUserToDatabase(userData)
                 try {
+                    const backendUrl = useBackendUrl();
                     // Send the user data to the backend using Axios
-                    const response = await axios.post('/user/google-login', userData);
+                    const response = await axios.post(`${backendUrl}/user/google-login`, userData);
                     const { token, user } = response.data; // Extract token and user data
 
     if (token) {

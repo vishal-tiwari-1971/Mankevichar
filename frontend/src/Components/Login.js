@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from 'axios'
 import Navbar from "./Navbar";
 import SignInWithGoogle from "./SignInWithGoogle";
+import { useBackendUrl } from "../Components/BackendContext"
 
 const Login = () => {
   // to store values from frontend
@@ -21,7 +22,8 @@ const Login = () => {
         email: userEmail,
         password: userPassword,
       }
-      const response = await axios.post("/user/login", data)
+      const backendUrl = useBackendUrl();
+      const response = await axios.post(`${backendUrl}/user/login`, data)
       console.log(response);
 
       if (response.data.success) {
