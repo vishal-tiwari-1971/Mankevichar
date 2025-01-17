@@ -1,17 +1,25 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-const auth = (req, res, next) => {
+
+const auth =(req, res, next) => {
+  console.log(req.cookies);
+  const { token } = req.cookies
+  console.log(token);
+  
+  // || req.header||req.body
+  // or {token}=req.cookies  token=req.cookies.token
+
+  // if token is exist
+  if (!(token)) {
+    return res.status(403).send('login  in again token missing')
+  }
+  //  to verify token
   try {
-    if (!req.cookies || !req.cookies.token) {
-      return res.status(403).send("Token missing, please log in again.");
-    }
+    const decode =jwt.verify(token, process.env.SECRET)
+    console.log("Decoded Token:",decode);
+    req.user = decode
 
-    const { token } = req.cookies;
-    const decoded = jwt.verify(token, process.env.SECRET);
-
-    console.log("Decoded Token:", decoded);
-    req.user = decoded; // Attach user info to the request
     next();
   } catch (error) {
     console.error("JWT verification error:", error.message);
