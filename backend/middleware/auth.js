@@ -1,28 +1,22 @@
-require("dotenv").config()
-// to access jwt
-const jwt = require('jsonwebtoken')
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
-  console.log(req.cookies);
-  const { token } = req.cookies
-  // || req.header||req.body
-  // or {token}=req.cookies  token=req.cookies.token
-
-  // if token is exist
-  if (!(token)) {
-    res.status(403).send('login  in again token missing')
-  }
-  //  to verify token
   try {
-    const decode = jwt.verify(token, process.env.SECRET)
-    console.log(decode);
-    req.user = decode
+    if (!req.cookies || !req.cookies.token) {
+      return res.status(403).send("Token missing, please log in again.");
+    }
 
-    return next()
-    // extract id from token and query to database
+    const { token } = req.cookies;
+    const decoded = jwt.verify(token, process.env.SECRET);
+
+    console.log("Decoded Token:", decoded);
+    req.user = decoded; // Attach user info to the request
+    next();
   } catch (error) {
-    // token not varified
-    return res.status(403).send('token is invalid')
+    console.error("JWT verification error:", error.message);
+    return res.status(403).send("Invalid token, please log in again.");
   }
-}
-module.exports = auth
+};
+
+module.exports = auth;
