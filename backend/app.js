@@ -27,13 +27,12 @@ setInterval(async () => {
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to Man Ke Vichar</h1> ")
 })
-app.use(cors(
-
-  { origin:["https://mankevichar.vercel.app"],
-    methods:["POST","GET","PUT","DELETE"],
-    credential:true
-  }
-))
+// Enable CORS for your frontend URL (replace with your frontend URL)
+app.use(cors({
+  origin: 'https://mankevichar-git-vishal-vishal-tiwaris-projects-86797c2a.vercel.app',  // Frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
 
