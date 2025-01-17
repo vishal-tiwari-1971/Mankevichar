@@ -27,7 +27,12 @@ setInterval(async () => {
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to Man Ke Vichar</h1> ")
 })
-app.use(cors({ origin:"http://localhost:3000"}))
+app.use(cors(
+  { origin:["http://localhost:3000"],
+    methods:["POST","GET"],
+    credential:true
+  }
+))
 app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
 
