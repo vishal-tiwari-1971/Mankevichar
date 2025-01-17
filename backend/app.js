@@ -24,11 +24,7 @@ setInterval(async () => {
 }, 30000*60); 
 
 // Enable CORS for your frontend URL (replace with your frontend URL)
-app.use(cors({
-  origin: 'https://mankevichar-git-vishal-vishal-tiwaris-projects-86797c2a.vercel.app',  // Frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
-}));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*")
