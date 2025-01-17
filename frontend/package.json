@@ -2,7 +2,7 @@
   "name": "mankevichar",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://mankevichar.vercel.app/",
+  "proxy": "https://mankevichar-preshiv-git-6d8d8a-vishal-tiwaris-projects-86797c2a.vercel.app",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
