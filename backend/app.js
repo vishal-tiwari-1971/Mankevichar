@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 })
 app.use(cors(
 
-  { origin:["https://mankevichar.vercel.app"],
+  { origin:["https://mankevichar.vercel.app/"],
     methods:["POST","GET"],
     credential:true
   }
