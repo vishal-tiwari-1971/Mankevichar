@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
   res.send("<h1>Welcome to Man Ke Vichar</h1> ")
 })
 app.use(cors(
+
   { origin:["https://mankevichar.vercel.app"],
     methods:["POST","GET"],
     credential:true
