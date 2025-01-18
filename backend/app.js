@@ -23,15 +23,24 @@ setInterval(async () => {
   await TempUser.deleteMany({ otpExpiration: { $lt: now } }); 
 }, 30000*60); 
 
-// Enable CORS for your frontend URL (replace with your frontend URL)
-app.use(cors());
+
+// Configure CORS
+const corsOptions = {
+  origin: 'https://mankevichar.vercel.app', // Allow this specific origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Include cookies if needed
+};
+
+app.use(cors(corsOptions));
+
 
 app.get("/", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Max-Age", "1800");
-  res.setHeader("Access-Control-Allow-Headers", "content-type");
-  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+//   res.setHeader("Access-Control-Allow-Origin", "*")
+//   res.setHeader("Access-Control-Allow-Credentials", "true");
+//   res.setHeader("Access-Control-Max-Age", "1800");
+//   res.setHeader("Access-Control-Allow-Headers", "content-type");
+//   res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+  res.send("Man ke Vichar")
    });
 
 app.use("/user", require("./Routes/user.routes"))
