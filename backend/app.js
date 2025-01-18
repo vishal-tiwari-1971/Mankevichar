@@ -23,14 +23,16 @@ setInterval(async () => {
   await TempUser.deleteMany({ otpExpiration: { $lt: now } }); 
 }, 30000*60); 
 
-// Enable CORS for your frontend URL (replace with your frontend URL)
-app.use(cors({
-  origin: 'https://mankevichar-git-vishal-vishal-tiwaris-projects-86797c2a.vercel.app',  // Frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
-}));
+// Configure CORS
+const corsOptions = {
+  origin: 'https://mankevichar.vercel.app', // Allow this specific origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // Include cookies if needed
+};
 
-app.get("/", (req, res) =>  (req, res) => {
+app.use(cors(corsOptions));
+
+app.get("/", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Max-Age", "1800");
