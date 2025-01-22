@@ -47,14 +47,7 @@ exports.signup = async (req, res) => {
     await sendMail(email, otp);
 
     // Respond with success
-    res.status(201).json({
-      message: "Registered successfully. OTP sent to your email. Please verify it.",
-      token,
-      user: {
-        name: user.name,
-        email: user.email,
-      },
-    });
+    res.status(201).send("Registered successfully. OTP sent to your email. Please verify it.");
 
    } catch (error) {
     console.error("Error during signup:", error);
@@ -139,7 +132,7 @@ exports.login = async (req, res) => {
 
     // Set token as a cookie and send response
     const options = {
-      expires: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000), // 4 days
+      expires: new Date(Date.now() +  2 * 60 * 60 * 1000), // 2 hours
       httpOnly: true // Protect from XSS attacks
     };
 
@@ -200,7 +193,7 @@ exports.googleLogin= async (req,res)=> {
 
     // Set token as a cookie and send response
     const options = {
-      expires: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000), // 4 days
+      expires: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hrs
       httpOnly: true // Protect from XSS attacks
     };
 

@@ -3,16 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Spinner from "./Spinner";
-import { useBackendUrl } from "../Components/BackendContext"
-
-
 
 const UserJournal = () => {
   const [userJournal, setUserJournal] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate(); // For navigation to login/signup
-  const backendUrl = useBackendUrl();
 
   useEffect(() => {
     const fetchJournals = async () => {
@@ -25,10 +21,14 @@ const UserJournal = () => {
       }
 
       try {
-        const response = await axios.get(`${backendUrl}/journal/dashboard`, {
+        const response = await axios.get(`/journal/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
+        if(response.data==null){
+          response.status(200)("create a Journal to see here")
+        }
+
       } catch (error) {
         if (error.response && error.response.status === 401) {
           setError("Unauthorized access. Please log in.");
@@ -55,7 +55,7 @@ const UserJournal = () => {
     }
 
     try {
-      const response = await axios.delete(`${backendUrl}/journal/delete/${id}`, {
+      const response = await axios.delete(`/journal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

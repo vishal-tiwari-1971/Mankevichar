@@ -4,21 +4,19 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
 import Spinner from './Spinner';
-import { useBackendUrl } from "../Components/BackendContext"
 
 const Journal=()=> {
   const { id } = useParams();
   console.log("Journal ID:", id);
   const [journal, setJournal] = useState(null);
   const [loading, setLoading] = useState(true);
-  const backendUrl = useBackendUrl();
 
   useEffect(() => {
     // Fetch the specific journal by ID from your backend API
     const getJournal = async () => {
       try {
         
-        const response = await axios.get(`${backendUrl}/journal/entry/${id}`);
+        const response = await axios.get(`/journal/entry/${id}`);
         console.log("data is : ",response.data)
         setJournal(response.data);
       } catch (error) {

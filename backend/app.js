@@ -24,20 +24,20 @@ setInterval(async () => {
 }, 30000*60); 
 
 // Configure CORS
-const corsOptions = {
-  origin: 'https://mankevichar.vercel.app', // Allow this specific origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  credentials: true, // Include cookies if needed
-};
+// const corsOptions = {
+//   origin: 'http://localhost:3000', // Allow this specific origin
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+//   credentials: true, // Include cookies if needed
+// };
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow this specific origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods,
+  credentials: true, // Allow cookies to be sent
+}));
 
 app.get("/", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Max-Age", "1800");
-  res.setHeader("Access-Control-Allow-Headers", "content-type");
-  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+  res.send("<h1>Welcome to Man Ke Vichar</h1> ") 
    });
 
 app.use("/user", require("./Routes/user.routes"))

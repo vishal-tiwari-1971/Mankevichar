@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { useBackendUrl } from "../Components/BackendContext"
 
 
 
@@ -15,14 +14,14 @@ const Update = () => {
   const [successMessage, setSuccessMessage] = useState(""); // For success message
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-  const backendUrl = useBackendUrl(); 
+
   const { id } = useParams();
   console.log("Journal Id : ", id);
 
   useEffect(() => {
     const entryById = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/journal/entry/${id}`);
+        const response = await axios.get(`/journal/entry/${id}`);
         console.log(response.data);
         const result = response.data;
         setTitle(result.title);
@@ -47,7 +46,7 @@ const Update = () => {
         formData.append("image", image);
       }
 
-      const response = await axios.put(`${backendUrl}/journal/update/${id}`, formData, {
+      const response = await axios.put(`/journal/update/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

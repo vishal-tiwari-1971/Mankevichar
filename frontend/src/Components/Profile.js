@@ -4,19 +4,17 @@ import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture';
 import Spinner from './Spinner';
-import { useBackendUrl } from "../Components/BackendContext"
-
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const backendUrl = useBackendUrl()
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    console.log("Auth Token:",token);
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('authToken');
 
         if (!token) {
           navigate('/login'); // Redirect to login if not authenticated
@@ -25,15 +23,15 @@ const Profile = () => {
 
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
         };
        ;
-        const { data } = await axios.get(`${backendUrl}/user/profile`, config);
+        const { data } = await axios.get(`/user/profile`, config);
         console.log('Profile Data:', data);
         setProfile(data);
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error('Error fetching profile:', error.response || error.message);
         setProfile(null);
       } finally {
         setLoading(false);
@@ -58,7 +56,7 @@ const Profile = () => {
         },
       };
 
-      await axios.post(`${backendUrl}/user/logout`, {}, config);
+      await axios.post(`/user/logout`, {}, config);
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {

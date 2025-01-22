@@ -3,14 +3,13 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import SignInWithGoogle from "./SignInWithGoogle";
-import { useBackendUrl } from "../Components/BackendContext"
 
 const Signup = () => {
   const [userName, setuserName] = useState("");
   const [userEmail, setuserEmail] = useState("");
   const [userPassword, setuserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // For displaying error messages
-  const backendUrl = useBackendUrl();
+
   const navigate = useNavigate();
 
   // Validate password (optional: you can make this stricter)
@@ -43,7 +42,7 @@ const Signup = () => {
 
     try {
      
-      const signupResponse = await axios.post(`${backendUrl}/user/signup`, data);
+      const signupResponse = await axios.post(`/user/signup`, data);
 
       if (signupResponse.status === 201) {
         // Redirect to OTP verification page

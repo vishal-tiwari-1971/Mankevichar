@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
-import { useBackendUrl } from "../Components/BackendContext"
-
 
 const CreateDiaryPage = () => {
   const [title, setTitle] = useState('');
@@ -12,8 +10,7 @@ const CreateDiaryPage = () => {
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-  const backendUrl = useBackendUrl(); // Access the backendUrl from context
-
+  
   useEffect(() => {
     const token = localStorage.getItem('authToken'); // Check if token exists
     console.log('Auth Token:', token); // Debug log
@@ -32,7 +29,7 @@ const CreateDiaryPage = () => {
     }
     
     try {
-      const response = await axios.post(`${backendUrl}/journal/entries`, formData, {
+      const response = await axios.post(`/journal/entries`, formData, {
         headers: {
           withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',
