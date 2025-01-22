@@ -2,11 +2,8 @@ import {GoogleAuthProvider,signInWithPopup} from "firebase/auth"
 import { auth } from '../firebase/firebase';
 import {useNavigate} from "react-router-dom";
 import axios from 'axios'
-import { useBackendUrl } from "../Components/BackendContext"
-
 const SignInWithGoogle=()=> {
     const navigate=useNavigate()
-    const backendUrl = useBackendUrl();
     const handleGoogleLogin = async () => {
         const provider=new GoogleAuthProvider();
         signInWithPopup(auth,provider)
@@ -22,18 +19,15 @@ const SignInWithGoogle=()=> {
                 }
                 // saveUserToDatabase(userData)
                 try {
-                    
                     // Send the user data to the backend using Axios
-                    const response = await axios.post(`${backendUrl}/user/google-login`, userData);
+                    const response = await axios.post('/user/google-login', userData);
                     const { token, user } = response.data; // Extract token and user data
-
     if (token) {
       localStorage.setItem('authToken', token); // Save token in localStorage
       console.log('Token stored in localStorage:', token);
     } else {
       console.error('No token received!');
     }
-
     console.log('Login successful:', user); // Log user details
   } catch (error) {
     console.error('Error during login:', error);
@@ -44,17 +38,16 @@ const SignInWithGoogle=()=> {
          }
       
         
-
-    const handleLogout=async()=>{
-        try {
-            await auth.signOut();
-            navigate("/") 
-        }
-        catch{
-            console.log("Error while Logout");
+    // const handleLogout=async()=>{
+    //     try {
+    //         await auth.signOut();
+    //         navigate("/") 
+    //     }
+    //     catch{
+    //         console.log("Error while Logout");
             
-        }
-    }
+    //     }
+    // }
         
         return (
    
@@ -63,7 +56,6 @@ const SignInWithGoogle=()=> {
     <p class="text-sm text-gray-800 text-center">or</p>
     <hr class="w-full border-gray-300" />
   </div>
-
   <button type="button" class="w-full flex items-center justify-center gap-4 py-3 px-6 text-sm tracking-wide text-gray-800 border border-gray-300 rounded-md bg-gray-50 hover:bg-[#f4f4fb] focus:outline-none" 
   onClick={handleGoogleLogin}
   >
@@ -91,5 +83,4 @@ const SignInWithGoogle=()=> {
   </button></div>
   )
 }
-
 export default SignInWithGoogle

@@ -3,15 +3,16 @@ import React, { useState } from "react";
 import axios from 'axios'
 import Navbar from "./Navbar";
 import SignInWithGoogle from "./SignInWithGoogle";
-import { useBackendUrl } from "../Components/BackendContext"
 
+const API_URL=process.env.REACT_APP_API_URL
 const Login = () => {
   // to store values from frontend
   const [userEmail, setuserEmail] = useState("")
   const [userPassword, setuserPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
-  const backendUrl = useBackendUrl();
+  console.log(API_URL);
+  
   console.log(userEmail, userPassword);
 
   const navigate = useNavigate()
@@ -24,11 +25,13 @@ const Login = () => {
         password: userPassword,
       }
      
-      const response = await axios.post(`${backendUrl}/user/login`, data)
+      const response = await axios.post(`/user/login`, data)
       console.log(response);
 
       if (response.data.success) {
         localStorage.setItem("authToken", response.data.token);
+        console.log("authToken", response.data.token);
+        
         setTimeout(function () {
           window.location.href = "/";
         }, 2000);

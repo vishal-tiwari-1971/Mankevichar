@@ -3,13 +3,11 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import UserJournal from './UserJournal';
 import { useNavigate } from 'react-router-dom';
-import { useBackendUrl } from "../Components/BackendContext"
 
 const Dashboard = () => {
   const [likedJournals, setLikedJournals] = useState([]);
   const [error, setError] = useState("");  // For storing error messages
   const navigate = useNavigate();
-  const backendUrl = useBackendUrl();
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -21,12 +19,15 @@ const Dashboard = () => {
     const fetchLikedJournals = async () => {
       
       try {
-        const response = await axios.get(`${backendUrl}/user/liked-journals`, {
+        const response = await axios.get(`/user/liked-journals`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setLikedJournals(response.data);
+        if(response.data==null){
+          // response.status(200)("You haven't liked any journals yet")
+        }
       } catch (error) {
         setError("Failed to fetch liked journals. Please try again later.");  // Setting error message for UI
         console.error('Error fetching liked journals:', error);
@@ -88,15 +89,15 @@ const Dashboard = () => {
                     </p>
                     <div className="flex justify-end items-center">
                       <button>
-                        <a href={`${backendUrl}/journal/entry/${journal._id}`}>Read More</a>
+                        <a href={`/journal/entry/${journal._id}`}>Read More</a>
                       </button>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-center text-xl text-gray-600 dark:text-gray-300">
+                <h2 className="text-center text-xl text-gray-600 dark:text-gray-300">
                   You haven't liked any journals yet.
-                </p>
+                </h2>
               )}
             </div>
           </div>

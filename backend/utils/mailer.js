@@ -25,7 +25,7 @@ const sendOTPEmail = (to, otp) => {
     text: `
       Dear User,
   
-      Thank you for registering with Men Ke Vichar. To complete your registration and activate your account, please verify your email address by entering the One-Time Password (OTP) provided below.
+      Thank you for registering with Man Ke Vichar. To complete your registration and activate your account, please verify your email address by entering the One-Time Password (OTP) provided below.
   
       Your OTP Code: ${otp}
   

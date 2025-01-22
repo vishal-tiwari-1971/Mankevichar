@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import { useNavigate ,useParams} from 'react-router-dom';
-import { useBackendUrl } from "../Components/BackendContext"
 
 const EditProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +11,7 @@ const EditProfilePage = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
-  const backendUrl = useBackendUrl();
+
   const { id } = useParams();
       console.log("user id : ", id);
 
@@ -48,7 +47,7 @@ const EditProfilePage = () => {
         },
       };
        
-      const { data } = await axios.put(`${backendUrl}/user/edit/${id}`, formData, config);
+      const { data } = await axios.put(`/user/edit/${id}`, formData, config);
       console.log("Sent id :",id);
       
       setSuccess(data.message || 'Profile updated successfully!');
