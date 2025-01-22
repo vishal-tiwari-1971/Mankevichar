@@ -23,7 +23,6 @@ setInterval(async () => {
   await TempUser.deleteMany({ otpExpiration: { $lt: now } }); 
 }, 30000*60); 
 
-
 // Configure CORS
 // const corsOptions = {
 //   origin: 'http://localhost:3000', // Allow this specific origin
@@ -37,10 +36,9 @@ app.use(cors({
   credentials: true, // Allow cookies to be sent
 }));
 
-
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to Man Ke Vichar</h1> ") 
-  });
+   });
 
 app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
