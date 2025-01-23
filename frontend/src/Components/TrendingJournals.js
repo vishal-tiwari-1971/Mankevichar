@@ -42,7 +42,7 @@ const TrendingJournal = () => {
       }
 
       const { data } = await axios.post(
-        `/journal/${journalId}/like`,
+        `https://mankevichar-preshivishal.vercel.app/journal/${journalId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

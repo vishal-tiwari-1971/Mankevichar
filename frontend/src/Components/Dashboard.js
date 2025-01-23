@@ -19,7 +19,7 @@ const Dashboard = () => {
     const fetchLikedJournals = async () => {
       
       try {
-        const response = await axios.get(`/user/liked-journals`, {
+        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/user/liked-journals`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
