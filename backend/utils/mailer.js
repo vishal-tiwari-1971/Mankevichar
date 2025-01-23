@@ -25,7 +25,7 @@ const sendOTPEmail = (to, otp) => {
     text: `
       Dear User,
   
-      Thank you for registering with Men Ke Vichar. To complete your registration and activate your account, please verify your email address by entering the One-Time Password (OTP) provided below.
+      Thank you for registering with Man Ke Vichar. To complete your registration and activate your account, please verify your email address by entering the One-Time Password (OTP) provided below.
   
       Your OTP Code: ${otp}
   
@@ -36,10 +36,10 @@ const sendOTPEmail = (to, otp) => {
   
       If you need any assistance or have questions, please don't hesitate to reach out to our support team at [Support Email Address].
   
-      Thank you for choosing Men Ke Vichar. We look forward to having you with us.
+      Thank you for choosing Man Ke Vichar. We look forward to having you with us.
   
       Best regards,
-      The Men Ke Vichar Team
+      The Man Ke Vichar Team
     `,
     html: `
       <p>Dear User,</p>
@@ -54,10 +54,10 @@ const sendOTPEmail = (to, otp) => {
   
       <p>If you need any assistance or have questions, please don't hesitate to reach out to our support team at <a href="mailto:[Support Email Address]">[Support Email Address]</a>.</p>
   
-      <p>Thank you for choosing <strong>Men Ke Vichar</strong>. We look forward to having you with us.</p>
+      <p>Thank you for choosing <strong>Man Ke Vichar</strong>. We look forward to having you with us.</p>
   
       <p>Best regards,<br>
-      The Men Ke Vichar Team</p>
+      The Man Ke Vichar Team</p>
     `,
   };
   

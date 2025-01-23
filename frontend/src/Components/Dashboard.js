@@ -24,6 +24,7 @@ const Dashboard = () => {
           },
         });
         setLikedJournals(response.data);
+       
       } catch (error) {
         setError("Failed to fetch liked journals. Please try again later.");  // Setting error message for UI
         console.error('Error fetching liked journals:', error);
