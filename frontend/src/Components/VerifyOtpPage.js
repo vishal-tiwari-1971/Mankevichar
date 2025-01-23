@@ -34,7 +34,7 @@ const VerifyOtpPage = () => {
 
       if (response.status === 200) {
         const loginData = { email, password };
-        const loginResponse = await axios.post(`https://mankevichar-preshivishal.vercel.app/user/login`, loginData);
+        const loginResponse = await axios.post(`/user/login`, loginData);
 
         localStorage.setItem("authToken", loginResponse.data.token);
         navigate("/");

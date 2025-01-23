@@ -29,7 +29,7 @@ const CreateDiaryPage = () => {
     }
     
     try {
-      const response = await axios.post(`https://mankevichar-preshivishal.vercel.app/journal/entries`, formData, {
+      const response = await axios.post(`/journal/entries`, formData, {
         headers: {
           withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',

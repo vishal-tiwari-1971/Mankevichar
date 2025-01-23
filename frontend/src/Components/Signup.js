@@ -42,7 +42,7 @@ const Signup = () => {
 
     try {
      
-      const signupResponse = await axios.post(`https://mankevichar-preshivishal.vercel.app/user/signup`, data);
+      const signupResponse = await axios.post(`/user/signup`, data);
 
       if (signupResponse.status === 201) {
         // Redirect to OTP verification page
