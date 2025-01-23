@@ -8,11 +8,12 @@ const TrendingJournal = () => {
   const [likedJournals, setLikedJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-
+  
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get("/journal/entries");
+        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/journal/entries`);
+        console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
         setErrorMessage(error.message);
@@ -130,7 +131,8 @@ const TrendingJournal = () => {
 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 dark:bg-gray-900">
-          {journalList.map((journal) => (
+          { Array.isArray(journalList) && journalList.length > 0 ?
+          ( journalList.map((journal) => (
             <div
               className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
               key={journal._id}
@@ -201,7 +203,10 @@ const TrendingJournal = () => {
                 </button>
               </div>
             </div>
-          ))}
+            ))
+           ) : (
+              <p>No journals found.</p>
+          )}
         </div>
       </div>
     </section>

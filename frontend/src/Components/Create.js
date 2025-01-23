@@ -10,7 +10,7 @@ const CreateDiaryPage = () => {
   const [image, setImage] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const token = localStorage.getItem('authToken'); // Check if token exists
     console.log('Auth Token:', token); // Debug log
@@ -27,10 +27,11 @@ const CreateDiaryPage = () => {
     if (image) {
       formData.append('image', image); // Add image file
     }
-
+    
     try {
-      const response = await axios.post('/journal/entries', formData, {
+      const response = await axios.post(`/journal/entries`, formData, {
         headers: {
+          withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },

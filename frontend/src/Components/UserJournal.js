@@ -25,6 +25,10 @@ const UserJournal = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
+        if(response.data==null){
+          response.status(200)("create a Journal to see here")
+        }
+
       } catch (error) {
         if (error.response && error.response.status === 401) {
           setError("Unauthorized access. Please log in.");

@@ -3,6 +3,8 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 
+
+
 const Update = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

@@ -17,14 +17,19 @@ const Dashboard = () => {
     }
 
     const fetchLikedJournals = async () => {
+      
       try {
-        const response = await axios.get('/user/liked-journals', {
+        const response = await axios.get(`/user/liked-journals`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setLikedJournals(response.data);
-       
+
+        if(response.data==null){
+          // response.status(200)("You haven't liked any journals yet")
+        }
+
       } catch (error) {
         setError("Failed to fetch liked journals. Please try again later.");  // Setting error message for UI
         console.error('Error fetching liked journals:', error);
@@ -92,9 +97,9 @@ const Dashboard = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-center text-xl text-gray-600 dark:text-gray-300">
+                <h2 className="text-center text-xl text-gray-600 dark:text-gray-300">
                   You haven't liked any journals yet.
-                </p>
+                </h2>
               )}
             </div>
           </div>

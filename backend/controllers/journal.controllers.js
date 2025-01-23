@@ -3,7 +3,7 @@ const User = require('../model/user')
 const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // or other configuration
+// const upload = multer({ dest: 'uploads/' }); // or other configuration
 const path = require('path');
 const auth = require('../middleware/auth')
 

@@ -15,7 +15,8 @@ const Journal=()=> {
     // Fetch the specific journal by ID from your backend API
     const getJournal = async () => {
       try {
-        const response = await axios.get(`/journal/entry/${id}`);
+        
+        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/journal/entry/${id}`);
         console.log("data is : ",response.data)
         setJournal(response.data);
       } catch (error) {
