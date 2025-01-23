@@ -12,7 +12,7 @@ const TrendingJournal = () => {
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get(`/journal/entries`);
+        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/journal/entries`);
         console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
