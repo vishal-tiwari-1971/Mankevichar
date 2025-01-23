@@ -25,9 +25,11 @@ const Dashboard = () => {
           },
         });
         setLikedJournals(response.data);
+
         if(response.data==null){
           // response.status(200)("You haven't liked any journals yet")
         }
+
       } catch (error) {
         setError("Failed to fetch liked journals. Please try again later.");  // Setting error message for UI
         console.error('Error fetching liked journals:', error);

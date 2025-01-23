@@ -4,7 +4,7 @@ import axios from 'axios'
 import Navbar from "./Navbar";
 import SignInWithGoogle from "./SignInWithGoogle";
 
-const API_URL=process.env.REACT_APP_API_URL
+
 const Login = () => {
   // to store values from frontend
   const [userEmail, setuserEmail] = useState("")
