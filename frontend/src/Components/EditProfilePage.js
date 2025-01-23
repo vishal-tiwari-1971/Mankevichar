@@ -47,7 +47,7 @@ const EditProfilePage = () => {
         },
       };
        
-      const { data } = await axios.put(`https://mankevichar-preshivishal.vercel.app/user/edit/${id}`, formData, config);
+      const { data } = await axios.put(`/user/edit/${id}`, formData, config);
       console.log("Sent id :",id);
       
       setSuccess(data.message || 'Profile updated successfully!');

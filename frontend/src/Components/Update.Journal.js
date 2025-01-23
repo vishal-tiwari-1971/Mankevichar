@@ -21,7 +21,7 @@ const Update = () => {
   useEffect(() => {
     const entryById = async () => {
       try {
-        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/journal/entry/${id}`);
+        const response = await axios.get(`/journal/entry/${id}`);
         console.log(response.data);
         const result = response.data;
         setTitle(result.title);
@@ -46,7 +46,7 @@ const Update = () => {
         formData.append("image", image);
       }
 
-      const response = await axios.put(`https://mankevichar-preshivishal.vercel.app/journal/update/${id}`, formData, {
+      const response = await axios.put(`/journal/update/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

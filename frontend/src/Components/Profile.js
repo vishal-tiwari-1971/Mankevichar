@@ -27,7 +27,7 @@ const Profile = () => {
           },
         };
        ;
-        const { data } = await axios.get(`https://mankevichar-preshivishal.vercel.app/user/profile`, config);
+        const { data } = await axios.get(`/user/profile`, config);
         console.log('Profile Data:', data);
         setProfile(data);
       } catch (error) {
@@ -56,7 +56,7 @@ const Profile = () => {
         },
       };
 
-      await axios.post(`https://mankevichar-preshivishal.vercel.app/user/logout`, {}, config);
+      await axios.post(`/user/logout`, {}, config);
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {
