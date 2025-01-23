@@ -25,7 +25,7 @@ const Login = () => {
         password: userPassword,
       }
      
-      const response = await axios.post(`/user/login`, data)
+      const response = await axios.post(`https://mankevichar-preshivishal.vercel.app/user/login`, data)
       console.log(response);
 
       if (response.data.success) {

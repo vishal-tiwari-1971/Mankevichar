@@ -21,7 +21,7 @@ const UserJournal = () => {
       }
 
       try {
-        const response = await axios.get(`/journal/dashboard`, {
+        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/journal/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
@@ -55,7 +55,7 @@ const UserJournal = () => {
     }
 
     try {
-      const response = await axios.delete(`/journal/delete/${id}`, {
+      const response = await axios.delete(`https://mankevichar-preshivishal.vercel.app/journal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
