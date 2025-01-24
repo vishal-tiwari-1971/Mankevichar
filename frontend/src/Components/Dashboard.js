@@ -87,7 +87,9 @@ const Dashboard = () => {
                       {journal.title}
                     </h3>
                     <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">
-                      {journal.content}
+                    {journal.content.length > 100 
+    ? `${journal.content.slice(0, 100)}...` 
+    : journal.content}
                     </p>
                     <div className="flex justify-end items-center">
                       <button>
