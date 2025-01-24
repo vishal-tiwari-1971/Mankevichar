@@ -131,8 +131,10 @@ const TrendingJournal = () => {
 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 dark:bg-gray-900">
-          { Array.isArray(journalList) && journalList.length > 0 ?
-          ( journalList.map((journal) => (
+          { Array.isArray(journalList) && journalList.length > 0 ? (
+            [...journalList]
+            .sort((a,b) => b.likeCount-a.likeCount) // sort journals by no. of like counts
+          .map((journal) => (
             <div
               className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
               key={journal._id}
@@ -157,9 +159,12 @@ const TrendingJournal = () => {
                 {journal.title}
               </h3>
               <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">
-                {journal.content}
+              {journal.content.length > 100 
+    ? `${journal.content.slice(0, 100)}...` 
+    : journal.content}
               </p>
               <div className="flex justify-between items-center">
+              <div className="flex gap-2">
                 <button onClick={() => toggleLike(journal._id)}>
                   {localStorage.getItem("authToken") &&
                   likedJournals.includes(journal._id) ? (
@@ -197,7 +202,7 @@ const TrendingJournal = () => {
 
                 <span className="text-gray-400 dark:text-white">
                   {journal.likeCount}
-                </span>
+                </span> </div>
                 <button>
                   <Link to={`/journal/entry/${journal._id}`}>Read More</Link>{" "}
                 </button>
