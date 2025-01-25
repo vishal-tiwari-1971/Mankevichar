@@ -54,28 +54,28 @@ const Support = () => {
 
     try {
       // Step 1: Call the backend to create an order
-      const orderResponse = await axios.post('/api/payment/create-order', { amount });
+      const orderResponse = await axios.post('/payment/create-order', { amount });
       if (orderResponse.status === 200) {
         setOrderId(orderResponse.data.orderId);
 
         const options = {
-          key: 'YOUR_RAZORPAY_KEY', // Replace with your Razorpay API Key
+          key: 'rzp_test_KkVliXojaIDN7W', // Replace with your Razorpay API Key
           amount: amount * 100, // Convert amount to paise (1 INR = 100 paise)
           currency: 'INR',
           order_id: orderResponse.data.orderId, // Order ID returned from backend
-          name: 'Your Company Name',
+          name: 'Man Ke Vichar',
           description: 'Support Us with a Donation',
-          image: 'https://your-logo-url.com',
+          image: '',
           handler: function (response) {
             // Handle the payment success
             console.log('Payment successful', response);
-            alert('Payment Successful!');
+            alert('Payment Successful , thank you for considering us !');
           },
-          prefill: {
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            contact: '9999999999',
-          },
+          // prefill: {
+          //   name: 'John Doe',
+          //   email: 'johndoe@example.com',
+          //   contact: '',
+          // },
           theme: {
             color: '#528FF0',
           },
