@@ -50,6 +50,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", require("./Routes/user.routes"))
 app.use("/journal", require("./Routes/journal.routes"))
+app.use("/payment",require("./Routes/payment.routes"))
 
 
 module.exports=app
