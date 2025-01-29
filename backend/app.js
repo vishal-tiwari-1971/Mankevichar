@@ -38,7 +38,7 @@ setInterval(async () => {
 // const whitelist = [process.env.FRONTEND || 'http://localhost:3000'];
 
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: process.env.frontend
   ,    // Allow this specific origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods,
   credentials: true, // Allow cookies to be sent

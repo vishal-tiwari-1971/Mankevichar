@@ -21,7 +21,7 @@ const UserJournal = () => {
       }
 
       try {
-        const response = await axios.get(`/journal/dashboard`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
@@ -55,7 +55,7 @@ const UserJournal = () => {
     }
 
     try {
-      const response = await axios.delete(`/journal/delete/${id}`, {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/journal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
