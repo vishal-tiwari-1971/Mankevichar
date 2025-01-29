@@ -18,6 +18,15 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(cookieParser())
 
+app.use(cors({
+  origin: process.env.FRONTEND_URL
+  ,    // Allow this specific origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods,
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
+  credentials: true, // Allow cookies to be sent
+}));
+console.log(process.env.FRONTEND_URL);
+
 setInterval(async () => {
   const now = new Date();
   await TempUser.deleteMany({ otpExpiration: { $lt: now } }); 
@@ -37,13 +46,7 @@ setInterval(async () => {
 
 // const whitelist = [process.env.FRONTEND || 'http://localhost:3000'];
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL
-  ,    // Allow this specific origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods,
-  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
-  credentials: true, // Allow cookies to be sent
-}));
+
 
 app.get("/", (req, res) => {
   res.send("<h1>Welcome to Man Ke Vichar</h1> ") 
