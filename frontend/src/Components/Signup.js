@@ -42,7 +42,7 @@ const Signup = () => {
 
     try {
      
-      const signupResponse = await axios.post(`/user/signup`, data);
+      const signupResponse = await axios.post(`${process.env.REACT_APP_API_URL}/user/signup`, data);
 
       if (signupResponse.status === 201) {
         // Redirect to OTP verification page

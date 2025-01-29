@@ -12,7 +12,7 @@ const TrendingJournal = () => {
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get(`https://mankevichar-preshivishal.vercel.app/journal/entries`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entries`);
         console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
@@ -42,7 +42,7 @@ const TrendingJournal = () => {
       }
 
       const { data } = await axios.post(
-        `/journal/${journalId}/like`,
+        `${process.env.REACT_APP_API_URL}/journal/${journalId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

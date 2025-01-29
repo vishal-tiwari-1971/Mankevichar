@@ -27,7 +27,7 @@ const Profile = () => {
           },
         };
        ;
-        const { data } = await axios.get(`/user/profile`, config);
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`, config);
         console.log('Profile Data:', data);
         setProfile(data);
       } catch (error) {
@@ -56,7 +56,7 @@ const Profile = () => {
         },
       };
 
-      await axios.post(`/user/logout`, {}, config);
+      await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, config);
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {
