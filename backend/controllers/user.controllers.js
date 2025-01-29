@@ -132,8 +132,10 @@ exports.login = async (req, res) => {
 
     // Set token as a cookie and send response
     const options = {
-      expires: new Date(Date.now() +  2 * 60 * 60 * 1000), // 2 hours
-      httpOnly: true // Protect from XSS attacks
+      expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' // Required for cross-site cookies
     };
 
     return res.status(200).cookie('token', token, options).json({
