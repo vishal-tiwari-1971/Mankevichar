@@ -40,7 +40,8 @@ const TrendingJournal = () => {
         setErrorMessage("Please log in to like a journal.");
         return;
       }
-
+       console.log(process.env.REACT_APP_API_URL);
+       
       const { data } = await axios.post(
         `${process.env.REACT_APP_API_URL}/journal/${journalId}/like`,
         {},
