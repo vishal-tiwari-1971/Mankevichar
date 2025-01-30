@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import UserJournal from './UserJournal';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 const Dashboard = () => {
   const [likedJournals, setLikedJournals] = useState([]);
@@ -17,14 +18,19 @@ const Dashboard = () => {
     }
 
     const fetchLikedJournals = async () => {
+      
       try {
-        const response = await axios.get('/user/liked-journals', {
+        const response = await axios.get(`/user/liked-journals`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setLikedJournals(response.data);
-       
+
+        if(response.data==null){
+          // response.status(200)("You haven't liked any journals yet")
+        }
+
       } catch (error) {
         setError("Failed to fetch liked journals. Please try again later.");  // Setting error message for UI
         console.error('Error fetching liked journals:', error);
@@ -82,7 +88,9 @@ const Dashboard = () => {
                       {journal.title}
                     </h3>
                     <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">
-                      {journal.content}
+                    {journal.content.length > 100 
+    ? `${journal.content.slice(0, 100)}...` 
+    : journal.content}
                     </p>
                     <div className="flex justify-end items-center">
                       <button>
@@ -92,14 +100,15 @@ const Dashboard = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-center text-xl text-gray-600 dark:text-gray-300">
+                <h2 className="text-center text-xl text-gray-600 dark:text-gray-300">
                   You haven't liked any journals yet.
-                </p>
+                </h2>
               )}
             </div>
           </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 };

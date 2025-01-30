@@ -25,6 +25,10 @@ const UserJournal = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
+        if(response.data==null){
+          response.status(200)("create a Journal to see here")
+        }
+
       } catch (error) {
         if (error.response && error.response.status === 401) {
           setError("Unauthorized access. Please log in.");
@@ -144,7 +148,9 @@ const UserJournal = () => {
                 {journal.title}
               </h3>
               <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">
-                {journal.content}
+              {journal.content.length > 100 
+    ? `${journal.content.slice(0, 100)}...` 
+    : journal.content}
               </p>
               <div className="flex space-x-2 mt-4">
                 <Link to={`/update/${journal._id}`}>

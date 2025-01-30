@@ -8,7 +8,6 @@ const VerifyOtpPage = () => {
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const email = location.state?.email;
   const password = location.state?.password;
 
@@ -26,7 +25,7 @@ const VerifyOtpPage = () => {
 
 
     try {
-      const response = await axios.post('/user/verify-otp', { email, otp }, {
+      const response = await axios.post(`https://mankevichar-preshivishal.vercel.app/user/verify-otp`, { email, otp }, {
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${authToken}` // Include token if necessary
@@ -35,7 +34,7 @@ const VerifyOtpPage = () => {
 
       if (response.status === 200) {
         const loginData = { email, password };
-        const loginResponse = await axios.post("/user/login", loginData);
+        const loginResponse = await axios.post(`/user/login`, loginData);
 
         localStorage.setItem("authToken", loginResponse.data.token);
         navigate("/");

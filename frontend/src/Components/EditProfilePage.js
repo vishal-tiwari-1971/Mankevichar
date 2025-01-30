@@ -1,64 +1,125 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import { useNavigate ,useParams} from 'react-router-dom';
 
 const EditProfilePage = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    password: '',
-  });
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const navigate = useNavigate();
-  const { id } = useParams();
-      console.log("user id : ", id);
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   password: '',
+  // });
+  // const [error, setError] = useState(null);
+  // const [success, setSuccess] = useState(null);
+  // const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const { id } = useParams();
+  //     console.log("user id : ", id);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setSuccess(null);
   
-    if (!id) {
-      setError('User ID is missing.');
-      return;
-    }
+  //   if (!id) {
+  //     setError('User ID is missing.');
+  //     return;
+  //   }
   
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        navigate('/login'); // Redirect to login if not authenticated
-        return;
-      }
+  //   try {
+  //     const token = localStorage.getItem('authToken');
+  //     if (!token) {
+  //       navigate('/login'); // Redirect to login if not authenticated
+  //       return;
+  //     }
   
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+  //     const config = {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //     };
+       
+  //     const { data } = await axios.put(`/user/edit/${id}`, formData, config);
+  //     console.log("Sent id :",id);
+      
+  //     setSuccess(data.message || 'Profile updated successfully!');
+  //     setTimeout(() => {
+  //       navigate("/profile"); // Redirect after 2 seconds
+  //     }, 1000);
+  //   } catch (error) {
+  //     setError(error.response?.data?.message || 'Error updating profile');
+  //   }
+  // };
+  
+  
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+   const [error, setError] = useState("");
+    const [success, setSuccess] = useState(""); // For success message
+    const navigate = useNavigate();
+  
+    const { id } = useParams();
+    console.log("User Id : ", id);
+  
+    useEffect(() => {
+      const userById = async () => {
+        try {
+          const response = await axios.get(`/user/profile`);
+          console.log(response.data);
+          const result = response.data;
+          setName(result.name);
+          setPassword(result.passwordt);
+           } catch (error) {
+          console.error("Error fetching user details:", error);
+          setError("An error occurred while fetching user details.");
+        }
       };
   
-      const { data } = await axios.put(`/user/edit/${id}`, formData, config);
-      console.log("Sent id :",id);
-      
-      setSuccess(data.message || 'Profile updated successfully!');
-      setTimeout(() => {
-        navigate("/profile"); // Redirect after 2 seconds
-      }, 1000);
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error updating profile');
-    }
-  };
+      userById();
+    }, [id]);
   
+    const submitData = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("password", password);
+        
+  
+        const response = await axios.put(`/user/edit/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+  
+        if (response.status === 200) {
+          setSuccess("User profile updated successfully!");
+          setTimeout(() => {
+            navigate("/profile"); // Redirect after 2 seconds
+          }, 2000);
+        } else {
+          setError("Failed to update the user profile.");
+        }
+      } catch (error) {
+        console.error("Error updating user profile:", error);
+        setError("An error occurred while updating the user.");
+      }
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      submitData();
+      // Reset form fields after submission
+      setName("");
+      setPassword("");
+      }; 
 
   return (
     <div className="dark:bg-gray-900">
@@ -69,41 +130,24 @@ const EditProfilePage = () => {
           <form onSubmit={handleSubmit} className="space-y-5 mt-5">
             <div>
               <label
-                htmlFor="firstName"
+                htmlFor="name"
                 className="block text-sm font-medium text-white"
               >
-                First Name
+                Name
               </label>
               <input
                 type="text"
                 
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
+                id="name"
+                name="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
                 className="w-full mt-1 p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter first name"
+                placeholder="Enter name"
                 required
               />
             </div>
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium text-white"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full mt-1 p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter last name"
-                required
-              />
-            </div>
+            
             <div>
               <label
                 htmlFor="password"
@@ -115,8 +159,8 @@ const EditProfilePage = () => {
                 type="password"
                 id="password"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 className="w-full mt-1 p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter new password"
                 required

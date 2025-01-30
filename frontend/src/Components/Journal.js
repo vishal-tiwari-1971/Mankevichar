@@ -15,6 +15,7 @@ const Journal=()=> {
     // Fetch the specific journal by ID from your backend API
     const getJournal = async () => {
       try {
+        
         const response = await axios.get(`/journal/entry/${id}`);
         console.log("data is : ",response.data)
         setJournal(response.data);
