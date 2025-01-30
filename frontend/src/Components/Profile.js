@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture';
 import Spinner from './Spinner';
+import Footer from './Footer';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -27,7 +28,9 @@ const Profile = () => {
           },
         };
        ;
+
         const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`, config);
+
         console.log('Profile Data:', data);
         setProfile(data);
       } catch (error) {
@@ -56,7 +59,9 @@ const Profile = () => {
         },
       };
 
+
       await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, config);
+
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {
@@ -132,6 +137,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

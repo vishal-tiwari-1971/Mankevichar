@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import UserJournal from './UserJournal';
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 const Dashboard = () => {
   const [likedJournals, setLikedJournals] = useState([]);
@@ -19,7 +20,9 @@ const Dashboard = () => {
     const fetchLikedJournals = async () => {
       
       try {
+
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/liked-journals`, {
+
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -107,6 +110,7 @@ const Dashboard = () => {
           </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 };

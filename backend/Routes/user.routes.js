@@ -17,6 +17,14 @@ router.post('/signup', userController.signup);
 // Route for registering using Google
 router.post("/google-login",userController.googleLogin)
 
+
+// Forgot password (send OTP)
+router.post('/forgot-password', userController.forgotPassword);
+
+// Reset password (after OTP verification)
+router.post('/reset-password', userController.resetPassword);
+
+
 // Route for login
 router.post('/login', userController.login);
 

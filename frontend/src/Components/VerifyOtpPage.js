@@ -25,7 +25,9 @@ const VerifyOtpPage = () => {
 
 
     try {
+
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/verify-otp`, { email, otp }, {
+
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${authToken}` // Include token if necessary

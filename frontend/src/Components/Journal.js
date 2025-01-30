@@ -16,7 +16,9 @@ const Journal=()=> {
     const getJournal = async () => {
       try {
         
+
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entry/${id}`);
+
         console.log("data is : ",response.data)
         setJournal(response.data);
       } catch (error) {
