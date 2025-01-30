@@ -20,7 +20,9 @@ const Dashboard = () => {
     const fetchLikedJournals = async () => {
       
       try {
-        const response = await axios.get(`/user/liked-journals`, {
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/liked-journals`, {
+
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +96,7 @@ const Dashboard = () => {
                     </p>
                     <div className="flex justify-end items-center">
                       <button>
-                        <a href={`/journal/entry/${journal._id}`}>Read More</a>
+                        <a href={`${process.env.REACT_APP_API_URL}/journal/entry/${journal._id}`}>Read More</a>
                       </button>
                     </div>
                   </div>

@@ -9,20 +9,35 @@ const OTP = require("../model/otp")
 // Signup Controller
 exports.signup = async (req, res) => {
   try {
+
+
+    console.log('Received data:', req.body);
+
     const { name, email, password } = req.body;
 
+    // Check for missing fields
     if (!(name && email && password)) {
-      return res.status(400).send("Please fill all the required fields");
+      return res.status(401).send("Please fill all the required fields");
+
     }
 
     const existUser = await User.findOne({ email, }) || await TempUser.findOne({ email, purpose: "registration" });
     if (existUser) {
       return res.status(400).send("User already registered with this email");
     }
+<
 
+
+     console.log("Email is unique, proceeding to password encryption...");
+    // Password encryption
     const encryptPassword = await bcrypt.hash(password, 10);
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiration = new Date(Date.now() + 10 * 60 * 1000);
+    console.log('Encrypted Password:', encryptPassword);
+    
+    // Generate OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+
+    // Save data in TempUser collection
 
     const tempUser = new TempUser({
       name,
@@ -36,8 +51,10 @@ exports.signup = async (req, res) => {
     await tempUser.save();
     await sendMail(email, otp, "verification");
 
+    // Respond with success
     res.status(201).send("Registered successfully. OTP sent to your email. Please verify it.");
-  } catch (error) {
+
+   } catch (error) {
     console.error("Error during signup:", error);
     res.status(500).send("There was an error during signup.");
   }
@@ -183,8 +200,11 @@ exports.login = async (req, res) => {
 
     // Set token as a cookie and send response
     const options = {
-      expires: new Date(Date.now() +  2 * 60 * 60 * 1000), // 2 hours
-      httpOnly: true // Protect from XSS attacks
+      expires: new Date(Date.now() + 2 * 60 * 60 * 1000),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' // Required for cross-site cookies
+
     };
 
     return res.status(200).cookie('token', token, options).json({

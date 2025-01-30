@@ -10,9 +10,6 @@ const Support = () => {
   const [amount, setAmount] = useState('');
   const [orderId, setOrderId] = useState(null);
 
-  
-
-  
 
   // Load Razorpay script
   useEffect(() => {
@@ -65,12 +62,16 @@ const Support = () => {
 
     try {
       // Step 1: Call the backend to create an order
-      const orderResponse = await axios.post('/payment/create-order', { amount });
+
+      const orderResponse = await axios.post(`${process.env.REACT_APP_API_URL}/payment/create-order`, { amount });
+
       if (orderResponse.status === 200) {
         setOrderId(orderResponse.data.orderId);
 
         const options = {
-          key: 'rzp_test_KkVliXojaIDN7W', // Replace with your Razorpay API Key
+
+          key: process.env.REACT_APP_RAZORPAY_KEY, // Replace with your Razorpay API Key
+
           amount: amount * 100, // Convert amount to paise (1 INR = 100 paise)
           currency: 'INR',
           order_id: orderResponse.data.orderId, // Order ID returned from backend
@@ -176,7 +177,9 @@ const Support = () => {
           <p>Email us at: <a href="mailto:parammiter03@gmail.com" className="text-blue-500 dark:text-yellow-500">parammiter03@gmail.com</a></p>
         </section>
       </div>
+
       <Footer />
+
     </div>
   );
 };

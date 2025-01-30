@@ -17,9 +17,11 @@ import Update from './Components/Update.Journal';
 import EditProfilePage from './Components/EditProfilePage';
 import VerifyOtpPage from "./Components/VerifyOtpPage";
 
+
 // Add the Forgot Password and Reset Password imports
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/ResetPassword';
+
 
 function App() {
   useEffect(() => {
@@ -39,6 +41,8 @@ function App() {
   }, []);
 
   return (
+   
+
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -58,7 +62,9 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </Router>
+
   );
+
 }
 
 export default App;
