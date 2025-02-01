@@ -43,7 +43,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <div className="dark:bg-gray-900 text-white">
+    <div className="dark:bg-gray-900 text-black bg:text-white">
       <Navbar />
       <div className="dashboard-container p-6">
         <section>
@@ -67,7 +67,7 @@ const Dashboard = () => {
               {likedJournals.length > 0 ? (
                 likedJournals.map((journal) => (
                   <div
-                    className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
+                    className="bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
                     key={journal._id}
                   >
                     <div className="w-full h-48 mb-2 overflow-hidden">
@@ -94,9 +94,9 @@ const Dashboard = () => {
     ? `${journal.content.slice(0, 100)}...` 
     : journal.content}
                     </p>
-                    <div className="flex justify-end items-center">
+                    <div className="flex justify-end items-center dark:text-white">
                       <button>
-                        <a href={`${process.env.REACT_APP_API_URL}/journal/entry/${journal._id}`}>Read More</a>
+                        <a href={`/journal/entry/${journal._id}`}>Read More</a>
                       </button>
                     </div>
                   </div>

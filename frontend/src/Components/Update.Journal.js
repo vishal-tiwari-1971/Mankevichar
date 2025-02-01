@@ -49,7 +49,9 @@ const Update = () => {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/journal/update/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
+        
       });
 
       if (response.status === 200) {
