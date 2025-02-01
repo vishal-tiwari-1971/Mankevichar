@@ -25,7 +25,7 @@ exports.signup = async (req, res) => {
     if (existUser) {
       return res.status(400).send("User already registered with this email");
     }
-<
+
 
 
      console.log("Email is unique, proceeding to password encryption...");
