@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import TrendingJournal from "./TrendingJournals";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const HomePage = () => {
   return (
     <div>
       <Navbar />
-
       <section className="bg-white dark:bg-gray-900">
         <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           {/* Left Column */}
@@ -60,14 +60,17 @@ const HomePage = () => {
       {/* Trending Journals */}
       <TrendingJournal />
 
-      {/* Footer */}
+      {/* Footer
       <footer className="bg-white dark:bg-gray-900">
         <div className="w-full mx-auto max-w-screen-xl p-4 text-center">
           <span className="text-sm text-gray-500 dark:text-gray-400">
             © 2024 <h4 className="inline font-bold">Man Ke Vichar™</h4>. All Rights Reserved.
           </span>
         </div>
-      </footer>
+      </footer> */}
+        
+         <Footer />
+      
     </div>
   );
 };
