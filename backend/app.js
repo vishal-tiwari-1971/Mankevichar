@@ -22,8 +22,9 @@ app.use(cors({
   origin: process.env.FRONTEND_URL
   ,    // Allow this specific origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods,
-  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
+  allowedHeaders: ['Content-Type', 'Authorization', 'withCredentials'],  // Allow these headers
   credentials: true, // Allow cookies to be sent
+  
 }));
 console.log(process.env.FRONTEND_URL);
 
