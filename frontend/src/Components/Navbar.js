@@ -65,7 +65,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Home
@@ -74,7 +74,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/create"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Create Diary
@@ -83,7 +83,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/dashboard"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Dashboard
@@ -92,7 +92,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/profile"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Profile
@@ -101,7 +101,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/support"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Support Us
