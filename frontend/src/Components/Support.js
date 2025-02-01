@@ -105,7 +105,7 @@ const Support = () => {
   return (
     <div>
       <Navbar />
-      <div className="support-container p-6 dark:bg-gray-900 text-white">
+      <div className="support-container p-6 text-black dark:bg-gray-900 dark:text-white">
         <h1 className="text-3xl font-bold mb-6">Support Us</h1>
 
         <section className="mb-10">
@@ -115,7 +115,7 @@ const Support = () => {
           </p>
 
           {/* Donation Section */}
-          <div className="bg-gray-800 p-4 rounded-lg mb-6 dark:text-white">
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6 text-black dark:text-white">
             <h3 className="font-semibold text-xl mb-2">Support Us with a Donation</h3>
             <p>If you would like to contribute financially, you can donate to us via UPI or CARD.</p>
             <div className="contribute-container p-6">
@@ -144,7 +144,7 @@ const Support = () => {
           </div>
 
           {/* Bug Report / Suggestion Section */}
-          <div className="bg-gray-800 p-4 rounded-lg dark:text-white">
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg dark:text-white">
             <h3 className="font-semibold text-xl mb-2">Report a Bug or Suggest an Improvement</h3>
             <p>Your feedback helps us improve the platform. Please share any issues or suggestions you have:</p>
             <form onSubmit={handleSubmit} className="mt-4">
