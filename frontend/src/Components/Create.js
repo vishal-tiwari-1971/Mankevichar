@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const CreateDiaryPage = () => {
   const [title, setTitle] = useState('');
@@ -29,7 +30,9 @@ const CreateDiaryPage = () => {
     }
     
     try {
+
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/journal/entries`, formData, {
+
         headers: {
           withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',
@@ -131,6 +134,7 @@ const CreateDiaryPage = () => {
           Submit Diary
         </button>
       </form>
+      <Footer />
     </div>
   );
 };

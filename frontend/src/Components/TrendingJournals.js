@@ -12,7 +12,9 @@ const TrendingJournal = () => {
   useEffect(() => {
     const getJournals = async () => {
       try {
+
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entries`);
+
         console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
