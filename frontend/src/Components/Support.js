@@ -9,13 +9,36 @@ const Support = () => {
   const [success, setSuccess] = useState(false);
   const [amount, setAmount] = useState('');
   const [orderId, setOrderId] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
 
-  
-
-  
-
-  // Load Razorpay script
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          setError('You must be logged in to send a message.');
+          return;
+        }
+
+        const response = await axios.get('/user/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+
+        if (response.data && response.data.email) {
+          setUserEmail(response.data.email);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setError('Failed to fetch user details. Please log in again.');
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    // Load Razorpay script
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.onload = () => {
@@ -28,25 +51,33 @@ const Support = () => {
     };
   }, []);
 
+  // Handle message submission
   const handleSubmit = async (e) => {
-   
     e.preventDefault();
     setError(null);
     setSuccess(false);
 
     if (!message.trim()) {
-      setError('Please enter a message');
+      setError('Please enter a message.');
       return;
     }
+
     const token = localStorage.getItem('authToken');
     if (!token) {
-      setError('You are not logged in.'); 
-       return;
-     }
+      setError('You must be logged in to send a message.');
+      return;
+    }
 
     try {
-      // Send the contribution (suggestion/bug report)
-      const response = await axios.post('/api/support/contribute', { message });
+      const response = await axios.post(
+        '/user/message',
+        { message },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        }
+      );
+
       if (response.status === 200) {
         setSuccess(true);
         setMessage('');
@@ -56,43 +87,35 @@ const Support = () => {
     }
   };
 
-  // Initiate Razorpay payment
+  // Handle Razorpay payment
   const initiatePayment = async () => {
-    if (!amount) {
-      setError('Please enter a valid amount');
+    if (!amount || amount <= 0) {
+      setError('Please enter a valid amount.');
       return;
     }
 
     try {
-      // Step 1: Call the backend to create an order
       const orderResponse = await axios.post('/payment/create-order', { amount });
       if (orderResponse.status === 200) {
         setOrderId(orderResponse.data.orderId);
 
         const options = {
           key: 'rzp_test_KkVliXojaIDN7W', // Replace with your Razorpay API Key
-          amount: amount * 100, // Convert amount to paise (1 INR = 100 paise)
+          amount: amount * 100, // Convert amount to paise
           currency: 'INR',
-          order_id: orderResponse.data.orderId, // Order ID returned from backend
+          order_id: orderResponse.data.orderId,
           name: 'Man Ke Vichar',
           description: 'Support Us with a Donation',
           image: '',
           handler: function (response) {
-            // Handle the payment success
             console.log('Payment successful', response);
-            alert('Payment Successful , thank you for considering us !');
+            alert('Payment Successful! Thank you for supporting us.');
           },
-          // prefill: {
-          //   name: 'John Doe',
-          //   email: 'johndoe@example.com',
-          //   contact: '',
-          // },
           theme: {
             color: '#528FF0',
           },
         };
 
-        // Open the Razorpay Checkout
         const razorpay = new window.Razorpay(options);
         razorpay.open();
       }
@@ -116,36 +139,34 @@ const Support = () => {
           {/* Donation Section */}
           <div className="bg-gray-800 p-4 rounded-lg mb-6 dark:text-white">
             <h3 className="font-semibold text-xl mb-2">Support Us with a Donation</h3>
-            <p>If you would like to contribute financially, you can donate to us via UPI or CARD.</p>
+            <p>If you would like to contribute financially, you can donate via UPI or CARD.</p>
             <div className="contribute-container p-6">
-              <form onSubmit={handleSubmit} className="mb-6">
-                <label htmlFor="amount" className="block text-lg font-semibold mb-2">
-                  Enter Contribution Amount
-                </label>
-                <input
-                  type="number"
-                  id="amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter amount"
-                />
-                {error && <p className="mt-2 text-red-500">{error}</p>}
-                <button
-                  type="button"
-                  onClick={initiatePayment}
-                  className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
-                >
-                  Proceed to Payment
-                </button>
-              </form>
+              <label htmlFor="amount" className="block text-lg font-semibold mb-2">
+                Enter Contribution Amount (INR)
+              </label>
+              <input
+                type="number"
+                id="amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                placeholder="Enter amount"
+              />
+              {error && <p className="mt-2 text-red-500">{error}</p>}
+              <button
+                type="button"
+                onClick={initiatePayment}
+                className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+              >
+                Proceed to Payment
+              </button>
             </div>
           </div>
 
           {/* Bug Report / Suggestion Section */}
           <div className="bg-gray-800 p-4 rounded-lg dark:text-white">
             <h3 className="font-semibold text-xl mb-2">Report a Bug or Suggest an Improvement</h3>
-            <p>Your feedback helps us improve the platform. Please share any issues or suggestions you have:</p>
+            <p>Your feedback helps us improve the platform. Please share any issues or suggestions:</p>
             <form onSubmit={handleSubmit} className="mt-4">
               <textarea
                 value={message}
@@ -167,11 +188,11 @@ const Support = () => {
           </div>
         </section>
 
-        {/* Contact Section (Optional) */}
+        {/* Contact Section */}
         <section>
           <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
           <p className="text-lg mb-4">
-            If you have any other questions or want to contribute in other ways, feel free to contact us directly:
+            If you have any questions or want to contribute in other ways, feel free to contact us:
           </p>
           <p>Email us at: <a href="mailto:parammiter03@gmail.com" className="text-blue-500 dark:text-yellow-500">parammiter03@gmail.com</a></p>
         </section>

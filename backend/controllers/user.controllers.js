@@ -15,7 +15,7 @@ exports.signup = async (req, res) => {
       return res.status(400).send("Please fill all the required fields");
     }
 
-    const existUser = await User.findOne({ email, }) || await TempUser.findOne({ email, purpose: "registration" });
+    const existUser = await User.findOne({ email, }) || await TempUser.findOne({ email,  });
     if (existUser) {
       return res.status(400).send("User already registered with this email");
     }
@@ -48,7 +48,7 @@ exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
   try {
-    const tempUser = await TempUser.findOne({ email, purpose: "registration" });
+    const tempUser = await TempUser.findOne({ email});
 
     if (!tempUser) {
       return res.status(404).send("User not found or OTP expired");
