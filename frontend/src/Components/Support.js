@@ -45,9 +45,7 @@ const Support = () => {
     }
 
     try {
-      const response = await axios.post(
-        '/user/message',
-        { message },
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/message`,{ message },
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
