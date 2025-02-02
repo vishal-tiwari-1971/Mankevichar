@@ -38,7 +38,7 @@ const VerifyOtpPage = () => {
 
       if (response.status === 200) {
         const loginData = { email, password };
-        const loginResponse = await axios.post(`/user/login`, loginData);
+        const loginResponse = await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, loginData);
 
         localStorage.setItem("authToken", loginResponse.data.token);
         navigate("/");
