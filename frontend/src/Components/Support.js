@@ -11,31 +11,7 @@ const Support = () => {
   const [orderId, setOrderId] = useState(null);
   const [userEmail, setUserEmail] = useState('');
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-          setError('You must be logged in to send a message.');
-          return;
-        }
 
-        const response = await axios.get('/user/profile', {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        });
-
-        if (response.data && response.data.email) {
-          setUserEmail(response.data.email);
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Failed to fetch user details. Please log in again.');
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   useEffect(() => {
     // Load Razorpay script
@@ -95,13 +71,22 @@ const Support = () => {
     }
 
     try {
-      const orderResponse = await axios.post('/payment/create-order', { amount });
+
+      // Step 1: Call the backend to create an order
+
+      const orderResponse = await axios.post(`${process.env.REACT_APP_API_URL}/payment/create-order`, { amount });
+
+
       if (orderResponse.status === 200) {
         setOrderId(orderResponse.data.orderId);
 
         const options = {
-          key: 'rzp_test_KkVliXojaIDN7W', // Replace with your Razorpay API Key
-          amount: amount * 100, // Convert amount to paise
+
+
+          key: process.env.REACT_APP_RAZORPAY_KEY, // Replace with your Razorpay API Key
+
+          amount: amount * 100, // Convert amount to paise (1 INR = 100 paise)
+
           currency: 'INR',
           order_id: orderResponse.data.orderId,
           name: 'Man Ke Vichar',
@@ -127,7 +112,7 @@ const Support = () => {
   return (
     <div>
       <Navbar />
-      <div className="support-container p-6 dark:bg-gray-900 text-white">
+      <div className="support-container p-6 text-black dark:bg-gray-900 dark:text-white">
         <h1 className="text-3xl font-bold mb-6">Support Us</h1>
 
         <section className="mb-10">
@@ -137,7 +122,7 @@ const Support = () => {
           </p>
 
           {/* Donation Section */}
-          <div className="bg-gray-800 p-4 rounded-lg mb-6 dark:text-white">
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6 text-black dark:text-white">
             <h3 className="font-semibold text-xl mb-2">Support Us with a Donation</h3>
             <p>If you would like to contribute financially, you can donate via UPI or CARD.</p>
             <div className="contribute-container p-6">
@@ -164,7 +149,7 @@ const Support = () => {
           </div>
 
           {/* Bug Report / Suggestion Section */}
-          <div className="bg-gray-800 p-4 rounded-lg dark:text-white">
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg dark:text-white">
             <h3 className="font-semibold text-xl mb-2">Report a Bug or Suggest an Improvement</h3>
             <p>Your feedback helps us improve the platform. Please share any issues or suggestions:</p>
             <form onSubmit={handleSubmit} className="mt-4">
@@ -197,7 +182,9 @@ const Support = () => {
           <p>Email us at: <a href="mailto:parammiter03@gmail.com" className="text-blue-500 dark:text-yellow-500">parammiter03@gmail.com</a></p>
         </section>
       </div>
+
       <Footer />
+
     </div>
   );
 };

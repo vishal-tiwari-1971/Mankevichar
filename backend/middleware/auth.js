@@ -2,39 +2,32 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 
-const auth =(req, res, next) => {
-  // console.log(req.cookies);
-  const { token } = req.cookies
-  console.log(token);
-  
-  // || req.header||req.body
-  // or {token}=req.cookies  token=req.cookies.token
+const auth = (req, res, next) => {
 
-  // if token is exist
-  // if (!(token)) {
-  //   return res.status(403).send('login  in again token missing')
-  // }
-  //  to verify token
-  // try {
-  //   const decode =jwt.verify(token, process.env.SECRET)
-  //   console.log("Decoded Token:",decode);
-  //   req.user = decode
+    let token;
+  // Check Authorization header
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  } 
+  // Check cookie
+  else if (req.cookies.token) {
+    token = req.cookies.token;
+  }
 
-  //   next();
-  // } catch (error) {
-  //   console.error("JWT verification error:", error.message);
-  //   return res.status(403).send("Invalid token, please log in again.");
-  // }
+  if (!token) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
 
   jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
-      // Token is expired or invalid, clear the cookie
+      console.error('JWT Error:', err);
       res.clearCookie('token');
-      return res.status(401).json({ message: 'Token expired or invalid' });
+      return res.status(401).json({ message: 'Invalid/expired token' });
     }
-    req.user = decoded; // Attach decoded user info to the request object
-    next(); } )
-  }
+    req.user = decoded;
+    next();
+  });
+};
     
 
 module.exports = auth;

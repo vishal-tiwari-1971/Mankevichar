@@ -72,11 +72,13 @@ const EditProfilePage = () => {
     useEffect(() => {
       const userById = async () => {
         try {
-          const response = await axios.get(`/user/profile`);
+
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`);
+
           console.log(response.data);
           const result = response.data;
           setName(result.name);
-          setPassword(result.passwordt);
+          setPassword(result.password);
            } catch (error) {
           console.error("Error fetching user details:", error);
           setError("An error occurred while fetching user details.");
@@ -93,9 +95,13 @@ const EditProfilePage = () => {
         formData.append("password", password);
         
   
-        const response = await axios.put(`/user/edit/${id}`, formData, {
+
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/user/edit/${id}`, formData, {
+
           headers: {
-            "Content-Type": "multipart/form-data",
+            withCredentials: true, // Ensures cookies are sent with the request
+            // 'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
         });
   

@@ -12,7 +12,9 @@ const TrendingJournal = () => {
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get(`/journal/entries`);
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entries`);
+
         console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
@@ -40,9 +42,10 @@ const TrendingJournal = () => {
         setErrorMessage("Please log in to like a journal.");
         return;
       }
-
+       console.log(process.env.REACT_APP_API_URL);
+       
       const { data } = await axios.post(
-        `/journal/${journalId}/like`,
+        `${process.env.REACT_APP_API_URL}/journal/${journalId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -136,7 +139,7 @@ const TrendingJournal = () => {
             .sort((a,b) => b.likeCount-a.likeCount) // sort journals by no. of like counts
           .map((journal) => (
             <div
-              className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
+              className="bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
               key={journal._id}
             >
               <div className="w-full h-48 mb-2 overflow-hidden">

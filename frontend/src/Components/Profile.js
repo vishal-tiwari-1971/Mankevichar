@@ -24,11 +24,13 @@ const Profile = () => {
 
         const config = {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+           Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
         };
        ;
-        const { data } = await axios.get(`/user/profile`, config);
+
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`, config);
+
         console.log('Profile Data:', data);
         setProfile(data);
       } catch (error) {
@@ -57,7 +59,9 @@ const Profile = () => {
         },
       };
 
-      await axios.post(`/user/logout`, {}, config);
+
+      await axios.post(`${process.env.REACT_APP_API_URL}/user/logout`, {}, config);
+
       localStorage.removeItem('authToken');
       navigate('/login');
     } catch (error) {
@@ -83,7 +87,7 @@ const Profile = () => {
       <Navbar />
       <div className="profile-container p-5 flex justify-center items-center">
         <div className="bg-white shadow dark:border rounded-lg p-10 dark:bg-gray-800 dark:border-gray-700 text-center w-80">
-          <h2 className="text-2xl font-semibold text-white">Your Profile</h2>
+          <h2 className="text-2xl font-semibold text-black dark:text-white">Your Profile</h2>
           <div className="flex justify-center">
             {profile.profilePicture ? (
               <img
@@ -96,22 +100,22 @@ const Profile = () => {
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-black dark:text-white">
             {profile?.name || 'Guest'}
           </h2>
-          <p className="text-sm text-white">{profile?.email || 'Not Available'}</p>
+          <p className="text-sm text-black dark:text-white">{profile?.email || 'Not Available'}</p>
           <div className="flex justify-around mt-4 text-white">
             <div>
-              <h3 className="text-lg font-bold">{formattedJoinDate}</h3>
-              <p className="text-xs">Joining Date</p>
+              <h3 className="text-lg font-bold  text-black dark:text-white">{formattedJoinDate}</h3>
+              <p className="text-xs text-black dark:text-white">Joining Date</p>
             </div>
             <div>
-              <h3 className="text-lg font-bold">{profile?.journals || 0}</h3>
-              <p className="text-xs">Journals</p>
+              <h3 className="text-lg font-bold text-black dark:text-white">{profile?.journals || 0}</h3>
+              <p className="text-xs text-black dark:text-white">Journals</p>
             </div>
             <div>
-              <h3 className="text-lg font-bold">{profile?.likedJournals || 0}</h3>
-              <p className="text-xs">Likes</p>
+              <h3 className="text-lg font-bold text-black dark:text-white">{profile?.likedJournals || 0}</h3>
+              <p className="text-xs text-black dark:text-white">Likes</p>
             </div>
           </div>
           <div className="mt-6 space-y-3">
