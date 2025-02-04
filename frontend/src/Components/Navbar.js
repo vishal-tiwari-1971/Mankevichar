@@ -16,7 +16,10 @@ const Navbar = () => {
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex gap-5 items-center">
-          <img src="/images/logo-1.png" className="h-[90px]" alt="MKV Logo" />
+          {/* <img src="/images/logo-1.png" className="h-[90px]" alt="MKV Logo" /> */}
+          <img 
+      src={window.matchMedia('(prefers-color-scheme: dark)').matches ? '/images/logo-1.png' : 'images/logo-light.jpg'}  className="h-[90px]" alt="MKV Logo"
+    />
         </div>
 
         {/* Mobile Menu Button */}
