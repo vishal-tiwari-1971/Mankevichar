@@ -1,8 +1,30 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
+
+  useEffect(() => {
+    // Create a media query listener for theme change
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // Update the state when the theme changes
+    const handleThemeChange = (e) => {
+      setIsDarkMode(e.matches);
+    };
+
+    // Attach the listener to detect theme changes
+    mediaQuery.addEventListener('change', handleThemeChange);
+
+    // Cleanup the listener when the component is unmounted
+    return () => {
+      mediaQuery.removeEventListener('change', handleThemeChange);
+    };
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -18,7 +40,8 @@ const Navbar = () => {
         <div className="flex gap-5 items-center">
           {/* <img src="/images/logo-1.png" className="h-[90px]" alt="MKV Logo" /> */}
           <img 
-      src={window.matchMedia('(prefers-color-scheme: dark)').matches ? '/images/logo-1.png' : 'images/logo-light.jpg'}  className="h-[90px]" alt="MKV Logo"
+      src={isDarkMode ? '/images/logo-1.png' : 'images/logo-light.jpg'} 
+ className="h-[90px]" alt="MKV Logo"
     />
         </div>
 
@@ -110,6 +133,9 @@ const Navbar = () => {
                 Support Us
               </Link>
             </li>
+            {/* <li className='text-black dark:text-white hover:text-blue-500'>
+              Mode
+            </li> */}
           </ul>
         </div>
       </div>
