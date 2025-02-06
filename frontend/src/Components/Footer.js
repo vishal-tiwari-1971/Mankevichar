@@ -2,7 +2,7 @@
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-6 ">
+    <footer className="bg-gray-100 dark:bg-gray-900 text-black dark:text-white  py-6 ">
         <hr/>
       <div className="container mx-auto flex flex-col items-center justify-center text-center space-y-4">
         {/* Navigation Links */}
@@ -27,7 +27,7 @@ function Footer() {
         </div> */}
 
         {/* Copyright Text */}
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-900 dark:text-gray-200 text-sm">
           © {new Date().getFullYear()} Man Ke Vichar. All Rights Reserved.
         </p>
       </div>
