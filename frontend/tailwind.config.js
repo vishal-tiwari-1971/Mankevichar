@@ -10,6 +10,7 @@ module.exports = {
       mono: ['Courier New', 'monospace'],
     }},
   },
+  darkMode: "class",
   plugins:[require('daisyui'),],
 }
 

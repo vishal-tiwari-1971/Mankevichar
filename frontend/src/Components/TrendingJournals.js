@@ -127,7 +127,7 @@ const TrendingJournal = () => {
       </div>
 
       <div className="flex justify-center">
-        <h2 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white font-serif">
+        <h2 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-gray-900 dark:text-white font-serif">
           Trending Diaries
         </h2>
       </div>
@@ -173,11 +173,11 @@ const TrendingJournal = () => {
                   likedJournals.includes(journal._id) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="white"
+                      fill="currentColor"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="size-6"
+                      className="size-6 w-6 h-6 text-red-500 dark:text-white" // Red in light mode, White in dark mode"
                     >
                       <path
                         strokeLinecap="round"
@@ -213,7 +213,7 @@ const TrendingJournal = () => {
             </div>
             ))
            ) : (
-              <p>No journals found.</p>
+              <p className="text-gray-700 dark:text-white">No journals found.</p>
           )}
         </div>
       </div>
