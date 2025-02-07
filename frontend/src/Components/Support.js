@@ -132,7 +132,7 @@ const Support = () => {
                 id="amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-800"
                 placeholder="Enter amount"
               />
               {error && <p className="mt-2 text-red-500">{error}</p>}
@@ -154,7 +154,7 @@ const Support = () => {
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg"
                 rows="6"
                 placeholder="Enter your message here"
               ></textarea>
