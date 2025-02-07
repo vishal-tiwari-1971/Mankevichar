@@ -1,29 +1,37 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true" || false
   );
 
   useEffect(() => {
-    // Create a media query listener for theme change
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
 
-    // Update the state when the theme changes
-    const handleThemeChange = (e) => {
-      setIsDarkMode(e.matches);
-    };
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
-    // Attach the listener to detect theme changes
-    mediaQuery.addEventListener('change', handleThemeChange);
-
-    // Cleanup the listener when the component is unmounted
-    return () => {
-      mediaQuery.removeEventListener('change', handleThemeChange);
-    };
+  useEffect(() => {
+    // If there's no user preference in localStorage, use the system theme
+    if (localStorage.getItem("darkMode") === null) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleThemeChange = (e) => {
+        setDarkMode(e.matches);
+      };
+      mediaQuery.addEventListener('change', handleThemeChange);
+      return () => mediaQuery.removeEventListener('change', handleThemeChange);
+    }
   }, []);
 
   const toggleMenu = () => {
@@ -38,11 +46,10 @@ const Navbar = () => {
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex gap-5 items-center">
-          {/* <img src="/images/logo-1.png" className="h-[90px]" alt="MKV Logo" /> */}
           <img 
-      src={isDarkMode ? '/images/logo-1.png' : 'images/logo-light.jpg'} 
- className="h-[90px]" alt="MKV Logo"
-    />
+            src={darkMode ? '/images/logo-1.png' : 'images/logo-light.jpg'} 
+            className="h-[90px]" alt="MKV Logo"
+          />
         </div>
 
         {/* Mobile Menu Button */}
@@ -71,7 +78,7 @@ const Navbar = () => {
 
         {/* Navbar Links */}
         <div
-          className={`fixed inset-0 z-10 bg-gray-900 bg-opacity-95 transition-transform ${
+          className={`fixed inset-0 z-10 bg-gray-100 dark:bg-gray-900  bg-opacity-95 transition-transform ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
           } md:static md:translate-x-0 md:bg-transparent`}
           id="navbar-default"
@@ -133,9 +140,18 @@ const Navbar = () => {
                 Support Us
               </Link>
             </li>
-            {/* <li className='text-black dark:text-white hover:text-blue-500'>
-              Mode
-            </li> */}
+
+            {/* Dark Mode Toggle Button */}
+            <button
+              onClick={toggleDarkMode}
+              className="text-lg text-gray-900 dark:text-white hover:text-gray-600"
+            >
+              {darkMode ? (
+                <SunIcon className="w-6 h-6" />
+              ) : (
+                <MoonIcon className="w-6 h-6" />
+              )}
+            </button>
           </ul>
         </div>
       </div>
@@ -144,3 +160,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
