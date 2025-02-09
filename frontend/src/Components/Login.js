@@ -89,20 +89,20 @@ const Login = () => {
                       <div className="flex items-center justify-between">
                           <div className="flex items-start">
                               <div className="flex items-center h-5">
-                                <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="" />
+                                <input id="remember" aria-describedby="remember" type="checkbox" className="w-5 h-5 border-2 border-gray-400 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-700 checked:bg-blue-600 checked:border-transparent" required="" />
                               </div>
                               <div className="ml-3 text-sm">
                                 <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
                               </div>
                           </div>
                           {/* Forgot password link */}
-                          <Link to="/forgot-password" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</Link>
+                          <Link to="/forgot-password" className="text-sm font-medium text-gray-800 hover:underline dark:text-gray-200">Forgot password?</Link>
                       </div>
 
                       <button type="submit" className="bg-blue-600 w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                      <SignInWithGoogle/>
                       <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                          Don’t have an account yet? <Link to="/signup" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
+                          Don’t have an account yet? <Link to="/signup" className="font-medium text-gray-800 hover:underline dark:text-gray-200">Sign up</Link>
 
                    
                       </p>

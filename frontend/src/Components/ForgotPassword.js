@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from "./Navbar";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -9,8 +10,7 @@ function ForgotPassword() {
 
   const handleRequestOTP = async () => {
     try {
-      const response = await axios.post(
-        '/user/forgot-password', { email }
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/forgot-password`, { email }
       );
       setMessage(response.data.message);
 
@@ -29,12 +29,14 @@ function ForgotPassword() {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
-      <h1 className="text-2xl font-bold mb-4">Forgot Password</h1>
+      <h1 className="text-2xl font-bold mb-4 text-gray-700 dark:text-white">Forgot Password</h1>
       <input
         type="email"
         placeholder="Enter your email"
-        className="border p-2 mb-4 w-80 rounded-md"
+        className="border p-2 mb-4 w-80 rounded-md bg-gray-200 dark:bg-gray-700 text-black dark:text-white placeholder-gray-800 dark:placeholder-gray-300"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -45,7 +47,8 @@ function ForgotPassword() {
         Request OTP
       </button>
       {message && <p className="mt-4 text-gray-600">{message}</p>}
-    </div>
+    </div> 
+    </>
   );
 }
 
