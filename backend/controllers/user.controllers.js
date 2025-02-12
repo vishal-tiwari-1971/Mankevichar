@@ -220,66 +220,56 @@ exports.login = async (req, res) => {
 };
 
 // Google-Login Logic
-exports.googleLogin= async (req,res)=> {
-  const {name,email,photoUrl,uid}= req.body;
-  try{
-    const user = await User.findOne({ firebaseuid: uid }) || await User.findOne({ email });
-  console.log(user);
+exports.googleLogin = async (req, res) => {
+  const { name, email, photoUrl, uid } = req.body;
+
+  try {
+    // Try to find the user by Firebase UID or email
+    let user = await User.findOne({ firebaseuid: uid }) || await User.findOne({ email });
+
+    // If the user doesn't exist, create a new user
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        profilePicture: photoUrl,
+        firebaseuid: uid,
+        isVerified: true,
+      });
+
+      console.log('Creating new user:', user);
+
+      // Save the new user and generate token immediately
+      await user.save(); // Save the new user
+
   
-
-    if(!user)
-    {
-      const user= new User(
-        {
-          name,
-          email,
-          profilePicture:photoUrl,
-          firebaseuid: uid,
-          isVerified:true,
-        }
-        
-        
-      )
-      console.log(user);
-      try {
-        await user.save();
-    } catch (err) {
-        console.error('Error saving user:', err.message);
     }
-    
-    }
-    // else {
-    //   // If the user exists, update the Firebase UID (if not already set)
-    //   if (!user.firebaseUid || user.firebaseUid !== uid) {
-    //     user.firebaseUid = uid;
-    //     user.name = displayName; // Optional: Update displayName
-    //     user.photoURL = photoURL; // Optional: Update photoURL
-    //     await user.save(); // Save the updated user
-    //   }
-    // }
-   // generating token
-   const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
-   user.password = undefined; // Remove password from the response
-   user.token = token;
 
-    // Set token as a cookie and send response
+    // After saving (or finding) the user, generate the token
+    const token = jwt.sign({ id: user._id, email }, process.env.SECRET, { expiresIn: '2h' });
+
+    // Remove the password field before sending the response
+    user.password = undefined;
+    user.token = token; // Attach token to the user object
+
+    // Set token as a cookie and send the response
     const options = {
-      expires: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hrs
-      httpOnly: true // Protect from XSS attacks
+      expires: new Date(Date.now() + 2 * 60 * 60 * 1000), // Token expires in 2 hours
+      httpOnly: true, // Protect from XSS attacks
     };
 
     return res.status(200).cookie('token', token, options).json({
       success: true,
       token,
-      user
+      user,
     });
-    
 
+  } catch (error) {
+    console.error('Error in Google login:', error);
+    res.status(500).json({ message: 'Error during login or registration', error });
   }
-  catch(error) {
-    res.status(500).json({message:"Getting error",error})
-  }
-}
+};
+
 // Logout logic
 exports.logout = (req, res) => {
   try {
