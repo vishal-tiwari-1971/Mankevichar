@@ -73,7 +73,7 @@ const CreateDiaryPage = () => {
           <input
             type="text"
             id="title"
-            className="block w-full p-2.5 mt-2 text-sm border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="block w-full p-2.5 mt-2 text-sm border border-gray-300 rounded-lg bg-gray-200 dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             required
@@ -86,7 +86,7 @@ const CreateDiaryPage = () => {
           <textarea
             id="content"
             rows="7"
-            className="block w-full p-2.5 mt-2 text-sm border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="block w-full p-2.5 mt-2 text-sm border border-gray-300 rounded-lg bg-gray-200 dark:bg-gray-700 dark:border-gray-600 text-black dark:text-white"
             value={content}
             onChange={(event) => setContent(event.target.value)}
           ></textarea>
@@ -96,7 +96,7 @@ const CreateDiaryPage = () => {
         <input
           id="file_input"
           type="file"
-          className="block w-full mt-2 text-sm border border-gray-300 rounded-lg cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400"
+          className="block w-full mt-2 text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-200 dark:bg-gray-700 dark:border-gray-600 text-gray-800 dark:text-gray-200"
           onChange={(event) => setImage(event.target.files[0])}
         />
         <div className="mt-4">
@@ -111,7 +111,7 @@ const CreateDiaryPage = () => {
                 onChange={(e) => setVisibility(e.target.value)}
                 className="form-radio"
               />
-              <span>Private</span>
+              <span className='text-gray-800 dark:text-gray-200'>Private</span>
             </label>
             <label className="flex items-center space-x-2">
               <input
@@ -122,7 +122,7 @@ const CreateDiaryPage = () => {
                 onChange={(e) => setVisibility(e.target.value)}
                 className="form-radio"
               />
-              <span>Public</span>
+              <span className='text-gray-800 dark:text-gray-200'>Public</span>
             </label>
           </div>
         </div>
