@@ -109,9 +109,9 @@ const CreateDiaryPage = () => {
                 value="private"
                 checked={visibility === 'private'}
                 onChange={(e) => setVisibility(e.target.value)}
-                className="form-radio"
+                className="form-radio appearance-none w-4 h-4 border border-gray-800 dark:border-gray-300 rounded-full checked:bg-gray-500 dark:checked:bg-gray-200 checked:border-transparent"
               />
-              <span className='text-gray-800 dark:text-gray-200'>Private</span>
+              <span className='text-gray-800 dark:text-gray-200 font-semibold'>Private</span>
             </label>
             <label className="flex items-center space-x-2">
               <input
@@ -120,9 +120,9 @@ const CreateDiaryPage = () => {
                 value="public"
                 checked={visibility === 'public'}
                 onChange={(e) => setVisibility(e.target.value)}
-                className="form-radio"
+                className="form-radio appearance-none w-4 h-4 border border-gray-800 dark:border-gray-300 rounded-full checked:bg-gray-500 dark:checked:bg-gray-200 checked:border-transparent"
               />
-              <span className='text-gray-800 dark:text-gray-200'>Public</span>
+              <span className='text-gray-800 dark:text-gray-200 font-semibold'>Public</span>
             </label>
           </div>
         </div>
