@@ -12,7 +12,7 @@ const HomePage = () => {
         <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           {/* Left Column */}
           <div className="lg:col-span-7 flex flex-col justify-center items-start">
-            <h1 className="max-w-2xl mb-4 text-3xl font-extrabold tracking-tight leading-tight md:text-5xl xl:text-6xl dark:text-white">
+            <h1 className="max-w-2xl mb-4 text-3xl font-extrabold tracking-tight leading-tight md:text-5xl xl:text-6xl text-gray-900 dark:text-white">
               Write, Reflect, and Share: A Simple Way to Keep Your Diary
             </h1>
             <p className="max-w-2xl mb-6 text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
@@ -60,14 +60,6 @@ const HomePage = () => {
       {/* Trending Journals */}
       <TrendingJournal />
 
-      {/* Footer
-      <footer className="bg-white dark:bg-gray-900">
-        <div className="w-full mx-auto max-w-screen-xl p-4 text-center">
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            © 2024 <h4 className="inline font-bold">Man Ke Vichar™</h4>. All Rights Reserved.
-          </span>
-        </div>
-      </footer> */}
         
          <Footer />
       

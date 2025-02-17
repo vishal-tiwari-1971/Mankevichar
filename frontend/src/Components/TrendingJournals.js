@@ -12,7 +12,9 @@ const TrendingJournal = () => {
   useEffect(() => {
     const getJournals = async () => {
       try {
-        const response = await axios.get(`/journal/entries`);
+
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entries`);
+
         console.log(response.data);
         setJournalList(response.data);
       } catch (error) {
@@ -40,9 +42,10 @@ const TrendingJournal = () => {
         setErrorMessage("Please log in to like a journal.");
         return;
       }
-
+       console.log(process.env.REACT_APP_API_URL);
+       
       const { data } = await axios.post(
-        `/journal/${journalId}/like`,
+        `${process.env.REACT_APP_API_URL}/journal/${journalId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -124,7 +127,7 @@ const TrendingJournal = () => {
       </div>
 
       <div className="flex justify-center">
-        <h2 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white font-serif">
+        <h2 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-gray-900 dark:text-white font-serif">
           Trending Diaries
         </h2>
       </div>
@@ -136,7 +139,7 @@ const TrendingJournal = () => {
             .sort((a,b) => b.likeCount-a.likeCount) // sort journals by no. of like counts
           .map((journal) => (
             <div
-              className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
+              className="bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
               key={journal._id}
             >
               <div className="w-full h-48 mb-2 overflow-hidden">
@@ -170,11 +173,11 @@ const TrendingJournal = () => {
                   likedJournals.includes(journal._id) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="white"
+                      fill="currentColor"
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="size-6"
+                      className="size-6 w-6 h-6 text-red-500 dark:text-white" // Red in light mode, White in dark mode"
                     >
                       <path
                         strokeLinecap="round"
@@ -210,7 +213,7 @@ const TrendingJournal = () => {
             </div>
             ))
            ) : (
-              <p>No journals found.</p>
+              <p className="text-gray-700 dark:text-white">No journals found.</p>
           )}
         </div>
       </div>

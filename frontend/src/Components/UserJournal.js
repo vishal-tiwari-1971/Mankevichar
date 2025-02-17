@@ -21,7 +21,7 @@ const UserJournal = () => {
       }
 
       try {
-        const response = await axios.get(`/journal/dashboard`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserJournal(response.data);
@@ -55,7 +55,7 @@ const UserJournal = () => {
     }
 
     try {
-      const response = await axios.delete(`/journal/delete/${id}`, {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/journal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -119,8 +119,8 @@ const UserJournal = () => {
 
   return (
     <section className="bg-white dark:bg-gray-900">
-      <h1 className="text-3xl font-bold mb-6 dark:text-white">Your Dashboard</h1>
-      <h2 className="text-2xl font-semibold mb-4">Your Uploaded Journals</h2>
+      <h1 className="text-3xl font-bold mb-6 text-black dark:text-white">Your Dashboard</h1>
+      <h2 className="text-2xl font-semibold mb-4 text-black dark:text-white">Your Uploaded Journals</h2>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {userJournal.map((journal) => (
@@ -144,7 +144,7 @@ const UserJournal = () => {
                   />
                 )}
               </div>
-              <h3 className="text-lg font-semibold mb-2 text-center text-white">
+              <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
                 {journal.title}
               </h3>
               <p className="text-gray-600 mb-2 text-left line-clamp-2 dark:text-white">

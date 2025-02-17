@@ -20,7 +20,9 @@ const SignInWithGoogle=()=> {
                 // saveUserToDatabase(userData)
                 try {
                     // Send the user data to the backend using Axios
-                    const response = await axios.post('/user/google-login', userData);
+
+                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/google-login`, userData);
+
                     const { token, user } = response.data; // Extract token and user data
     if (token) {
       localStorage.setItem('authToken', token); // Save token in localStorage

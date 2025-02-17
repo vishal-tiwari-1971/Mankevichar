@@ -1,8 +1,38 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true" || false
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
+  useEffect(() => {
+    // If there's no user preference in localStorage, use the system theme
+    if (localStorage.getItem("darkMode") === null) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleThemeChange = (e) => {
+        setDarkMode(e.matches);
+      };
+      mediaQuery.addEventListener('change', handleThemeChange);
+      return () => mediaQuery.removeEventListener('change', handleThemeChange);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -16,7 +46,10 @@ const Navbar = () => {
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex gap-5 items-center">
-          <img src="/images/logo-1.png" className="h-[90px]" alt="MKV Logo" />
+          <img 
+            src={darkMode ? '/images/logo-1.png' : 'images/logo-light.jpg'} 
+            className="h-[90px]" alt="MKV Logo"
+          />
         </div>
 
         {/* Mobile Menu Button */}
@@ -45,7 +78,7 @@ const Navbar = () => {
 
         {/* Navbar Links */}
         <div
-          className={`fixed inset-0 z-10 bg-gray-900 bg-opacity-95 transition-transform ${
+          className={`fixed inset-0 z-10 bg-gray-100 dark:bg-gray-900  bg-opacity-95 transition-transform ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
           } md:static md:translate-x-0 md:bg-transparent`}
           id="navbar-default"
@@ -65,7 +98,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Home
@@ -74,7 +107,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/create"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Create Diary
@@ -83,7 +116,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/dashboard"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Dashboard
@@ -92,7 +125,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/profile"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Profile
@@ -101,12 +134,24 @@ const Navbar = () => {
             <li>
               <Link
                 to="/support"
-                className="text-white hover:text-blue-500"
+                className="text-black dark:text-white hover:text-blue-500"
                 onClick={closeMenu}
               >
                 Support Us
               </Link>
             </li>
+
+            {/* Dark Mode Toggle Button */}
+            <button
+              onClick={toggleDarkMode}
+              className="text-lg text-gray-900 dark:text-white hover:text-gray-600"
+            >
+              {darkMode ? (
+                <SunIcon className="w-6 h-6" />
+              ) : (
+                <MoonIcon className="w-6 h-6" />
+              )}
+            </button>
           </ul>
         </div>
       </div>
@@ -115,3 +160,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

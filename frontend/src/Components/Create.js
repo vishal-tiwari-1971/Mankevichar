@@ -30,7 +30,9 @@ const CreateDiaryPage = () => {
     }
     
     try {
-      const response = await axios.post(`/journal/entries`, formData, {
+
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/journal/entries`, formData, {
+
         headers: {
           withCredentials: true, // Ensures cookies are sent with the request
           'Content-Type': 'multipart/form-data',
