@@ -13,6 +13,7 @@ const Support = () => {
 
 
 
+
   useEffect(() => {
     // Load Razorpay script
     const script = document.createElement('script');

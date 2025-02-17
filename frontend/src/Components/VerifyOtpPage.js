@@ -31,6 +31,7 @@ const VerifyOtpPage = () => {
 
 
         headers: { 
+
           "Content-Type": "application/json",
           "Authorization": `Bearer ${authToken}` // Include token if necessary
         }
