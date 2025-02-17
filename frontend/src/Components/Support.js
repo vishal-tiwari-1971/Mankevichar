@@ -12,6 +12,8 @@ const Support = () => {
   const [userEmail, setUserEmail] = useState('');
 
 
+
+
   useEffect(() => {
     // Load Razorpay script
     const script = document.createElement('script');

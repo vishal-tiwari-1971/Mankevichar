@@ -125,7 +125,7 @@ const UserJournal = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {userJournal.map((journal) => (
             <div
-              className="bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
+              className="bg-gray-100 dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col"
               key={journal._id}
             >
               <div className="w-full h-48 mb-2 overflow-hidden">

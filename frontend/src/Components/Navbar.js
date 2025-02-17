@@ -87,7 +87,7 @@ const Navbar = () => {
           {isOpen && (
             <button
               onClick={closeMenu}
-              className="absolute top-4 left-4 text-white text-2xl"
+              className="absolute top-4 left-4 text-black dark:text-white text-2xl"
             >
               ✖
             </button>
