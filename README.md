@@ -132,7 +132,8 @@ Man Ke Vichar is a dedicated project for diary writers. It allows users to creat
 1. Deploy on [Vercel](https://vercel.com/):
    - Push your frontend code to GitHub.
    - Import the repository into Vercel.
-   - Set the `VITE_BACKEND_URL` environment variable in Vercel settings.
+   - Set the `REACT_APP_API_URL` environment variable in Vercel settings.
+   - Set the `REACT_APP_RAZORPAY_KEY` environment variable in Vercel settings for Razorpay.
 
 ## License
 This project is licensed under the MIT License.
