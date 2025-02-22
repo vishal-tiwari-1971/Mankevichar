@@ -33,7 +33,7 @@ Man Ke Vichar is a dedicated project for diary writers. It allows users to creat
 - Payment integration for premium features
 
 ## Tech Stack
-- **Frontend:** React.js, Tailwind CSS, Vite
+- **Frontend:** React.js, Tailwind CSS , JavaScript
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
 - **Authentication:** JSON Web Tokens (JWT)
@@ -82,7 +82,7 @@ Man Ke Vichar is a dedicated project for diary writers. It allows users to creat
 ### Frontend
 1. Create a `.env` file in the `frontend` directory and add the following:
    ```properties
-   VITE_BACKEND_URL=http://localhost:5000
+   REACT_APP_BACKEND_URL=http://localhost:5000
    ```
 
 ## Usage
