@@ -82,7 +82,7 @@ Man Ke Vichar is a dedicated project for diary writers. It allows users to creat
 ### Frontend
 1. Create a `.env` file in the `frontend` directory and add the following:
    ```properties
-   REACT_APP_BACKEND_URL=http://localhost:5000
+   REACT_APP_API_URL=http://localhost:5000
    ```
 
 ## Usage
