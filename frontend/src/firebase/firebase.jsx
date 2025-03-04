@@ -9,7 +9,7 @@ import { getAnalytics } from "firebase/analytics";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: "man-ke-vichar-fdd4d.firebaseapp.com",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
   projectId: "man-ke-vichar-fdd4d",
   storageBucket: "man-ke-vichar-fdd4d.firebasestorage.app",
   messagingSenderId: "681872009583",
