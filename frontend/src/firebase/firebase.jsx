@@ -10,7 +10,7 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
-  projectId: "man-ke-vichar-fdd4d",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
   storageBucket: "man-ke-vichar-fdd4d.firebasestorage.app",
   messagingSenderId: "681872009583",
   appId: "1:681872009583:web:654a048820a62b2602209a"
