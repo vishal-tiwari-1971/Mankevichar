@@ -17,9 +17,10 @@ const Journal=()=> {
       try {
         
 
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entry/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/journal/entry/${id}`)
 
-        console.log("data is : ",response.data)
+      console.log("data is : ",response.data)
+        
         setJournal(response.data);
       } catch (error) {
         console.error("Error fetching journal:", error);
