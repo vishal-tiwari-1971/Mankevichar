@@ -21,8 +21,7 @@ exports.getAllEntries = async (req, res) => {
 // Get journal entries by id
 exports.getEntryById = async (req, res) => {
     try {
-        const journals = await Journal.findById(req.params.id);
-
+        const journals = await Journal.findById(req.params.id)
         return res.status(200).json(journals);
     } catch (error) {
         console.log(error);
@@ -162,3 +161,51 @@ exports.deleteEntry = async (req, res) => {
         return res.status(500).json({ message: 'Error deleting the journal entry.' });
     }
 };
+
+
+// to like a journal
+exports.likeJournal=async (req,res)=> {
+    try {
+        const journalId = req.params.id;
+        const userId = req.user.id; // Assume user ID from JWT
+    
+        // Find the journal to like/unlike
+        const journal = await Journal.findById(journalId);
+        if (!journal) {
+          return res.status(404).json({ message: 'Journal not found' });
+        }
+    
+        // Ensure `likes` is an array
+        if (!Array.isArray(journal.likes)) {
+          journal.likes = []; // Initialize as empty array if undefined
+        }
+    
+        const hasLiked = journal.likes.some((id) => id.toString() === userId.toString());
+    
+        if (hasLiked) {
+          // Unlike the journal
+          journal.likes.pull(userId);
+          journal.likeCount--;
+    
+          // Remove journal ID from user's liked journals
+          await User.findByIdAndUpdate(userId, { $pull: { likedJournals: journalId } });
+        } else {
+          // Like the journal
+          journal.likes.push(userId);
+          journal.likeCount++;
+    
+          // Add journal ID to user's liked journals
+          await User.findByIdAndUpdate(userId, { $push: { likedJournals: journalId } });
+        }
+    
+        // Save the journal after updating likes and likeCount
+        await journal.save();
+    
+        // Send response with updated likeCount and like status
+        res.status(200).json({ likeCount: journal.likeCount, hasLiked: !hasLiked });
+      } catch (error) {
+        console.error('Error toggling like:', error);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+
+}
